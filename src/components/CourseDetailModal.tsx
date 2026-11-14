@@ -1,0 +1,65 @@
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+import { courseOutcome, displayCourseTitleFor, instructorFor } from "@/lib/course-meta";
+import type { Assignment, Course } from "@/lib/semester";
+
+type CourseDetailCardProps = {
+  assignments: Assignment[];
+  course: Course;
+};
+
+export function CourseDetailCard({ assignments, course }: CourseDetailCardProps) {
+  const outcome = courseOutcome(course);
+  const activeAssignments = assignments.filter((assignment) => assignment.status !== "CANCELLED");
+  const completedAssignments = activeAssignments.filter(
+    (assignment) =>
+      assignment.status === "GRADED" ||
+      assignment.canvas_submission_confirmed ||
+      assignment.status === "USER_MARKED_SUBMITTED" ||
+      assignment.progress_percent === 100
+  );
+
+  const isRenewal = course.final_grade === "AR" || course.official_grade === "AR";
+
+  return (
+    <Link
+      className="group block w-full rounded-lg border border-slate-200 p-3 text-left transition-all hover:border-slate-400 hover:bg-slate-50 hover:shadow-sm focus:outline-none focus:ring-2 focus:ring-slate-400"
+      href={`/courses/${course.id}`}
+      prefetch
+    >
+      <div className="flex items-start justify-between gap-2">
+        <div>
+          <div className="flex items-center gap-2">
+            <p className="text-sm font-semibold" style={{ color: course.color }}>
+              {course.code}
+            </p>
+            {isRenewal ? (
+              <span className="rounded bg-amber-100 px-1.5 py-0.5 text-[10px] font-bold text-amber-900">
+                Academic Renewal
+              </span>
+            ) : null}
+          </div>
+          <h3 className="mt-1 text-base font-semibold leading-snug">{displayCourseTitleFor(course)}</h3>
+        </div>
+        <ArrowRight className="mt-1 h-4 w-4 text-slate-400 transition-transform group-hover:translate-x-0.5 group-hover:text-slate-700" />
+      </div>
+      <p className="mt-2 text-sm text-slate-600">{instructorFor(course)}</p>
+      <p className="mt-1 text-xs font-medium text-slate-500">
+        {course.units} units · {course.modality} ·
+        <span
+          className={`ml-1 inline-flex rounded px-1.5 py-0.5 align-middle text-xs font-semibold ${
+            isRenewal
+              ? "bg-amber-100 text-amber-900 font-bold"
+              : outcome === "A"
+              ? "bg-emerald-100 text-emerald-800 font-bold"
+              : outcome !== "In progress"
+              ? "bg-slate-200 text-slate-800 font-semibold"
+              : "bg-slate-100 text-slate-700"
+          }`}
+        >
+          {isRenewal ? "AR" : outcome}
+        </span>
+      </p>
+    </Link>
+  );
+}

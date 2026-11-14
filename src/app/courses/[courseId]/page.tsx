@@ -1,0 +1,480 @@
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { ArrowLeft, BookOpen, CalendarDays, CheckCircle2, ExternalLink, FileText, Flag } from "lucide-react";
+import {
+  campusDisplayFor,
+  classTypeLinesFor,
+  classTypeSummaryFor,
+  displayCourseTitleFor,
+  courseOutcome,
+  instructorFor,
+  professorRatingLineFor,
+  pointsLabel,
+  sanitizeSnippet,
+  submissionClass,
+  submissionLabel,
+  taskTypeLabels,
+  topicsFor,
+  totalPoints,
+} from "@/lib/course-meta";
+import { getDashboardData } from "@/lib/dashboard-data";
+import { formatShortDate, schoolTimeZone, termConfigs } from "@/lib/semester";
+import type { Assignment, Course, TermConfig } from "@/lib/semester";
+
+type CoursePageProps = {
+  params: Promise<{
+    courseId: string;
+  }>;
+  searchParams?: Promise<{
+    view?: string;
+  }>;
+};
+
+type CourseRoomTab = {
+  href: string;
+  id: string;
+  label: string;
+  titleLabel?: string;
+};
+
+export default async function CoursePage({ params, searchParams }: CoursePageProps) {
+  const { courseId } = await params;
+  const query = searchParams ? await searchParams : {};
+  const { courses, courseAssignments } = await getDashboardData();
+  const course = courses.find((item) => item.id === courseId);
+
+  if (!course) {
+    notFound();
+  }
+
+  const assignments = courseAssignments.filter((assignment) => assignment.course_id === course.id && assignment.status !== "CANCELLED");
+  const completedAssignments = assignments.filter(
+    (assignment) =>
+      assignment.status === "GRADED" ||
+      assignment.canvas_submission_confirmed ||
+      assignment.status === "USER_MARKED_SUBMITTED" ||
+      assignment.progress_percent === 100
+  );
+  const outcome = courseOutcome(course);
+  const classTypeSummary = classTypeSummaryFor(course);
+  const roomTabs = buildCourseRoomTabs(course, assignments);
+  const requestedView = query.view;
+  const activeView = requestedView && roomTabs.some((tab) => tab.id === requestedView) ? requestedView : "overview";
+  const visibleAssignments = assignmentsForView(assignments, activeView);
+  const points = totalPoints(assignments);
+  const backTerm = termConfigs.find((term) => term.label === course.term_label);
+  const backHref = termHref(backTerm);
+  const backLabel = backTerm?.label ?? course.term_label;
+
+  const isRenewal = course.final_grade === "AR" || course.official_grade === "AR";
+
+  return (
+    <main className="min-h-screen bg-[#f7f8f3] text-slate-950">
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto max-w-6xl px-5 py-8 lg:px-8">
+          <Link className="inline-flex items-center gap-2 text-sm font-semibold text-teal-800" href={backHref}>
+            <ArrowLeft className="h-4 w-4" />
+            {backLabel}
+          </Link>
+
+          <div className="mt-6 flex flex-col justify-between gap-5 lg:flex-row lg:items-end">
+            <div>
+              <div className="flex flex-wrap items-center gap-2">
+                <p className="font-semibold text-teal-800">{course.code}</p>
+                {isRenewal ? (
+                  <span className="rounded bg-amber-100 px-2 py-0.5 text-xs font-bold text-amber-900">
+                    Academic Renewal (AR)
+                  </span>
+                ) : null}
+              </div>
+              <h1 className="mt-3 max-w-4xl text-4xl font-semibold tracking-normal md:text-5xl">
+                {displayCourseTitleFor(course)}
+              </h1>
+              <p className="mt-3 text-slate-600">
+                {course.term_label} · {course.units} units · {classTypeSummary}
+              </p>
+            </div>
+            <div className="rounded-lg border border-slate-200 bg-slate-50 p-4">
+              <p className="text-sm font-medium text-slate-600">{outcome === "In progress" ? "Current Status" : "Course Outcome"}</p>
+              <p className="mt-2 text-3xl font-semibold">
+                {isRenewal ? "AR" : outcome}
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="mx-auto grid max-w-6xl gap-6 px-5 py-6 lg:grid-cols-[0.55fr_minmax(0,1.45fr)] lg:px-8">
+        <div className="space-y-6">
+          <div className="grid gap-3 sm:grid-cols-3 lg:grid-cols-1">
+            <StatCard icon={<BookOpen />} label="Assignments" value={`${completedAssignments.length}/${assignments.length}`} />
+            <StatCard icon={<FileText />} label="Points Possible" value={points ? `${points}` : "N/A"} />
+          </div>
+
+          <div className="rounded-lg border border-slate-200 bg-white p-5">
+            <h2 className="text-xl font-semibold">Course &amp; Flight Information</h2>
+            <div className="mt-4 grid gap-3 text-sm">
+              <InfoItem label="Semester" value={course.term_label} />
+              <InfoItem label="Dates" value={`${course.starts_on} to ${course.ends_on}`} />
+              <InfoItem
+                label="Instructor"
+                value={
+                  <>
+                    <span>{instructorFor(course)}</span>
+                    <span className="mt-1 block text-xs font-semibold text-slate-500">({professorRatingLineFor(course)})</span>
+                  </>
+                }
+              />
+              <InfoItem
+                label="Class Type"
+                value={classTypeLinesFor(course).map((line) => (
+                  <span className="block" key={line}>
+                    {line}
+                    {line === "(Asynchronous)" ? (
+                      <span className="ml-2 inline-block rounded bg-sky-50 px-1.5 py-0.5 align-middle text-xs font-semibold text-sky-700">Async</span>
+                    ) : null}
+                  </span>
+                ))}
+              />
+              <InfoItem label="Location / Facility" value={campusDisplayFor(course)} />
+              <InfoItem label="Canvas Course ID" value={course.canvas_course_id ? `${course.canvas_course_id}` : "Not synced yet"} />
+            </div>
+          </div>
+        </div>
+
+        <div className="min-w-0 space-y-6">
+          <CourseRoomTabs activeView={activeView} tabs={roomTabs} />
+          {activeView === "overview" ? (
+            <>
+              <CourseOverviewInsights assignments={assignments} course={course} />
+              <CourseStrategy assignments={assignments} course={course} />
+            </>
+          ) : (
+            <div className="rounded-lg border border-slate-200 bg-white">
+              <div className="border-b border-slate-200 p-5">
+                <h2 className="text-xl font-semibold">{assignmentPanelTitle(activeView, roomTabs)}</h2>
+                <p className="mt-2 text-sm text-slate-600">
+                  Synced from Glendale Community College Canvas LMS and local flight records.
+                </p>
+              </div>
+
+              {visibleAssignments.length ? (
+                <div className="divide-y divide-slate-200">
+                  {visibleAssignments.map((assignment) => (
+                    <AssignmentRow assignment={assignment} key={assignment.id} />
+                  ))}
+                </div>
+              ) : assignments.length ? (
+                <div className="p-5">
+                  <p className="rounded-lg bg-slate-50 p-3 text-sm text-slate-600">
+                    No assignments match this tab yet. Switch to &apos;All&apos; to view the full list.
+                  </p>
+                </div>
+              ) : (
+                <ArchivedSummary course={course} />
+              )}
+            </div>
+          )}
+        </div>
+      </section>
+    </main>
+  );
+}
+
+function termHref(term: TermConfig | undefined) {
+  if (!term) return "/";
+  return `/?term=${term.id}`;
+}
+
+function buildCourseRoomTabs(course: Course, assignments: Assignment[]): CourseRoomTab[] {
+  const baseHref = `/courses/${course.id}`;
+  const monthTabs = monthGroups(assignments).map((month) => ({
+    href: `${baseHref}?view=${month.id}`,
+    id: month.id,
+    label: `${month.label} (${month.count})`,
+    titleLabel: `${month.label} (${month.count})`,
+  }));
+
+  return [
+    { href: baseHref, id: "overview", label: "Overview" },
+    ...monthTabs,
+    { href: `${baseHref}?view=assignments`, id: "assignments", label: "All" },
+  ];
+}
+
+function CourseRoomTabs({ activeView, tabs }: { activeView: string; tabs: CourseRoomTab[] }) {
+  return (
+    <nav aria-label="Course room sections" className="overflow-x-auto rounded-lg border border-slate-200 bg-white p-1.5">
+      <div className="flex min-w-max gap-1">
+        {tabs.map((tab) => {
+          const isActive = tab.id === activeView;
+          return (
+            <Link
+              aria-current={isActive ? "page" : undefined}
+              className={`rounded-md px-2.5 py-2 text-sm font-semibold transition-colors ${
+                isActive ? "bg-slate-900 text-white shadow-sm" : "text-slate-600 hover:bg-slate-100 hover:text-slate-950"
+              }`}
+              href={tab.href}
+              key={tab.id}
+            >
+              {tab.label}
+            </Link>
+          );
+        })}
+      </div>
+    </nav>
+  );
+}
+
+function assignmentPanelTitle(activeView: string, tabs: CourseRoomTab[]) {
+  if (activeView === "assignments") return "All Assignments";
+  const tab = tabs.find((item) => item.id === activeView);
+  return `${tab?.titleLabel ?? tab?.label ?? "Monthly"} Assignments`;
+}
+
+function assignmentsForView(assignments: Assignment[], activeView: string) {
+  if (activeView === "overview" || activeView === "assignments") return assignments;
+
+  return assignments.filter((assignment) => assignmentMonthKey(assignment.due_at) === activeView);
+}
+
+function monthGroups(assignments: Assignment[]) {
+  const months = new Map<string, { count: number; label: string }>();
+
+  assignments.forEach((assignment) => {
+    const id = assignmentMonthKey(assignment.due_at);
+    if (!id) return;
+
+    const month = months.get(id);
+    if (month) {
+      month.count += 1;
+      return;
+    }
+
+    months.set(id, {
+      count: 1,
+      label: assignmentMonthLabel(assignment.due_at),
+    });
+  });
+
+  return Array.from(months.entries()).map(([id, month]) => ({ id, ...month }));
+}
+
+function assignmentMonthKey(value: string | null) {
+  if (!value) return null;
+  const parts = new Intl.DateTimeFormat("en-US", {
+    month: "short",
+    timeZone: schoolTimeZone,
+    year: "numeric",
+  }).formatToParts(new Date(value));
+  const month = parts.find((part) => part.type === "month")?.value.toLowerCase();
+  const year = parts.find((part) => part.type === "year")?.value;
+  return month && year ? `${month}-${year}` : null;
+}
+
+function assignmentMonthLabel(value: string | null) {
+  if (!value) return "No Month";
+  return new Intl.DateTimeFormat("en-US", {
+    month: "long",
+    timeZone: schoolTimeZone,
+    year: "numeric",
+  }).format(new Date(value));
+}
+
+function CourseOverviewInsights({ assignments, course }: { assignments: Assignment[]; course: Course }) {
+  const submittedCount = assignments.filter(
+    (assignment) => assignment.canvas_submission_confirmed || assignment.status === "USER_MARKED_SUBMITTED" || assignment.status === "GRADED",
+  ).length;
+  const gradedCount = assignments.filter((assignment) => assignment.status === "GRADED").length;
+  const discussionCount = assignments.filter((assignment) => assignment.task_type === "discussion").length;
+  const quizCount = assignments.filter((assignment) => assignment.task_type === "quiz").length;
+  const flightLabCount = assignments.filter((assignment) => assignment.task_type === "flight_lab").length;
+  const completionRate = percentageLabel(submittedCount, assignments.length);
+  const gradedRate = percentageLabel(gradedCount, assignments.length);
+  const mainWorkType = mainWorkTypeLabel(assignments);
+  const coursePace = coursePaceLabel(course, assignments);
+
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-5">
+      <div>
+        <h2 className="text-xl font-semibold">{course.code} Summary</h2>
+        <p className="mt-1 text-sm text-slate-600">A quick read of the course rhythm before drilling into monthly tabs.</p>
+      </div>
+      <div className="mt-4 grid gap-3 sm:grid-cols-4">
+        <MiniInsight label="Submitted" value={`${submittedCount}/${assignments.length}`} />
+        <MiniInsight label="Graded" value={gradedCount.toString()} />
+        <MiniInsight label="Discussions" value={discussionCount.toString()} />
+        <MiniInsight label="Quizzes / Tests" value={quizCount.toString()} />
+        <MiniInsight label="Flight Labs" value={flightLabCount.toString()} />
+        <MiniInsight label="Completion Rate" value={completionRate} />
+        <MiniInsight label="Graded Rate" value={gradedRate} />
+        <MiniInsight label="Main Work Type" value={mainWorkType} />
+        <MiniInsight label="Course Pace" value={coursePace} />
+      </div>
+    </div>
+  );
+}
+
+function CourseStrategy({ assignments, course }: { assignments: Assignment[]; course: Course }) {
+  const months = monthGroups(assignments);
+  const highPointTasks = assignments.filter((assignment) => (assignment.points_possible ?? 0) >= 10).length;
+
+  return (
+    <div className="rounded-lg border border-emerald-200 bg-emerald-50 p-5">
+      <h2 className="text-xl font-semibold text-slate-950">A Strategy from {course.code}</h2>
+      <p className="mt-2 text-sm text-slate-700">
+        This course is part of the GCC Professional Pilot Training Program. Maintain regular flight simulator practice, logbook endorsements, and verify FAA Knowledge Test alignment.
+      </p>
+      <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <MiniInsight label="Active months" value={months.length.toString()} />
+        <MiniInsight label="High-point tasks" value={highPointTasks.toString()} />
+      </div>
+      <div className="mt-4 grid gap-2 text-sm text-slate-700">
+        <StrategyStep text="Use month tabs to see where flight simulator and exam spikes occur." />
+        <StrategyStep text="Maintain Cessna 172 preflight checklists and weather minimums rigor." />
+        <StrategyStep text="Store logbook endorsements, simulator slips, and submission proof." />
+        <StrategyStep text="Steady weekly ground study prevents last-minute stage check stress." />
+      </div>
+    </div>
+  );
+}
+
+function MiniInsight({ label, value }: { label: string; value: string }) {
+  return (
+    <div className="rounded-lg bg-slate-50 p-3">
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</p>
+      <p className="mt-1 text-xl font-semibold text-slate-950">{value}</p>
+    </div>
+  );
+}
+
+function StrategyStep({ text }: { text: string }) {
+  return (
+    <div className="flex gap-2 rounded-lg bg-white/70 px-3 py-2">
+      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-700" />
+      <span>{text}</span>
+    </div>
+  );
+}
+
+function AssignmentRow({ assignment }: { assignment: Assignment }) {
+  const guide = assignment.notes ? sanitizeSnippet(assignment.notes) : null;
+  const isComplete =
+    assignment.status === "GRADED" ||
+    assignment.canvas_submission_confirmed ||
+    assignment.status === "USER_MARKED_SUBMITTED";
+
+  return (
+    <article className="p-5">
+      <div className="flex flex-col justify-between gap-3 md:flex-row md:items-start">
+        <div>
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="rounded bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-700">
+              {taskTypeLabels[assignment.task_type] || assignment.task_type}
+            </span>
+            <span className={`rounded px-2 py-1 text-xs font-semibold ${submissionClass(assignment.status, assignment.canvas_submission_confirmed)}`}>
+              {submissionLabel(assignment.status, assignment.canvas_submission_confirmed)}
+            </span>
+          </div>
+          <h3 className="mt-2 text-lg font-semibold text-slate-950">{assignment.title}</h3>
+          <div className="mt-2 flex flex-wrap gap-3 text-sm text-slate-600">
+            <span className="inline-flex items-center gap-1">
+              <CalendarDays className="h-4 w-4" />
+              {assignment.due_at ? formatShortDate(assignment.due_at) : "No due date"}
+            </span>
+            <span>{pointsLabel(assignment)}</span>
+          </div>
+        </div>
+        {assignment.url ? (
+          <a
+            className={`inline-flex w-fit items-center gap-2 rounded-md border px-3 py-2 text-sm font-semibold hover:border-slate-400 ${
+              isComplete ? "border-slate-100 text-slate-500" : "border-slate-200 text-slate-700"
+            }`}
+            href={assignment.url}
+            rel="noreferrer"
+            target="_blank"
+          >
+            <ExternalLink className="h-4 w-4" />
+            Canvas
+          </a>
+        ) : null}
+      </div>
+
+      {guide ? (
+        <div className="mt-3 rounded-lg bg-slate-50 p-3 text-sm text-slate-700">
+          <p>{guide}</p>
+        </div>
+      ) : null}
+    </article>
+  );
+}
+
+function percentageLabel(part: number, total: number) {
+  if (total === 0) return "N/A";
+  return `${Math.round((part / total) * 1000) / 10}%`;
+}
+
+function mainWorkTypeLabel(assignments: Assignment[]) {
+  if (assignments.length === 0) return "N/A";
+  const counts = new Map<Assignment["task_type"], number>();
+
+  assignments.forEach((assignment) => {
+    counts.set(assignment.task_type, (counts.get(assignment.task_type) ?? 0) + 1);
+  });
+
+  const [taskType, count] = Array.from(counts.entries()).sort((a, b) => b[1] - a[1])[0];
+  return `${taskTypeLabels[taskType] || taskType} (${count})`;
+}
+
+function coursePaceLabel(course: Course, assignments: Assignment[]) {
+  const start = new Date(`${course.starts_on}T00:00:00`);
+  const end = new Date(`${course.ends_on}T00:00:00`);
+  const weeks = Math.max(1, Math.ceil((end.getTime() - start.getTime()) / (1000 * 60 * 60 * 24 * 7)));
+  const weeklyLoad = assignments.length / weeks;
+
+  if (weeks <= 8 || weeklyLoad >= 4) return "Accelerated";
+  if (weeklyLoad >= 2) return "Steady";
+  return "Light";
+}
+
+function ArchivedSummary({ course }: { course: Course }) {
+  const outcome = courseOutcome(course);
+  const isRenewal = course.final_grade === "AR" || course.official_grade === "AR";
+
+  return (
+    <div className="p-5">
+      <h3 className="font-semibold">Course Completion Record</h3>
+      <p className="mt-2 text-sm text-slate-600">
+        {isRenewal ? "Excluded from GPA calculation via Academic Renewal (AR)." : `Completed with official grade: ${outcome}.`}
+      </p>
+      <div className="mt-4 grid gap-2 sm:grid-cols-2">
+        {topicsFor(course).map((topic) => (
+          <span className="rounded-md bg-slate-50 px-3 py-2 text-sm font-medium text-slate-700" key={topic}>
+            {topic}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+function InfoItem({ label, value }: { label: string; value: React.ReactNode }) {
+  return (
+    <div className="rounded-md bg-slate-50 px-3 py-2">
+      <p className="text-xs font-semibold uppercase tracking-wide text-slate-500">{label}</p>
+      <p className="mt-1 font-medium text-slate-900">{value}</p>
+    </div>
+  );
+}
+
+function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: string }) {
+  return (
+    <div className="rounded-lg border border-slate-200 bg-white p-4">
+      <div className="flex items-center gap-2 text-sm font-medium text-slate-600">
+        <span className="text-teal-700 [&_svg]:h-4 [&_svg]:w-4">{icon}</span>
+        {label}
+      </div>
+      <p className="mt-2 text-2xl font-semibold text-slate-950">{value}</p>
+    </div>
+  );
+}

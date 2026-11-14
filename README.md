@@ -1,7 +1,7 @@
 # ✈️ Student Sky · GCC Aviation & Pilot Training Operations
 
 > Academic & Flight Training Operations Dashboard for **Glendale Community College (GCC)**  
-> Degree: **Associate of Science in Aviation and Transportation - Pilot Training** (7-Term FAA Part 141 Pathway)  
+> Degree: **Associate of Science in Pilot Training** (FAA Part 141 Pathway)  
 > Automated synchronization with **GCC Canvas LMS** daily at **06:00 AM PST** via Vercel Cron.
 
 ---

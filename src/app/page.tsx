@@ -18,11 +18,8 @@ import {
   Lock,
   CalendarCheck,
   CheckSquare,
-  FileCheck2,
-  BarChart3,
   Layers,
-  Terminal,
-  Play
+  GraduationCap
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { Course, Assignment, Announcement, FlightLabLog, SyncLog } from '@/types';
@@ -44,103 +41,46 @@ export default function StudentSkyDashboard() {
 
   // Fallback initial data in case Supabase is loading
   const defaultCourses: Course[] = [
-    {
-      id: 'c1',
-      canvas_id: 92601,
-      course_code: 'AT 120',
-      name: 'Private Pilot Ground School (FAA Written Prep)',
-      term: 'Spring 2026',
-      term_order: 1,
-      units: 5.0,
-      instructor: 'Capt. R. Miller, CFI/CFII',
-      status: 'enrolled',
-      current_grade: 'A',
-      current_score: 95.0,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'c2',
-      canvas_id: 92602,
-      course_code: 'AT 121L',
-      name: 'Private Pilot Flight Lab I (Whiteman KPOC)',
-      term: 'Spring 2026',
-      term_order: 1,
-      units: 2.0,
-      instructor: 'Chief Flight Instructor Whiteman',
-      status: 'enrolled',
-      current_grade: 'A',
-      current_score: 98.0,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'c3',
-      canvas_id: 92603,
-      course_code: 'IND T',
-      name: 'Industrial Technology & Aviation Pathway',
-      term: 'Spring 2026',
-      term_order: 1,
-      units: 1.0,
-      instructor: 'Division of Tech & Aviation',
-      status: 'enrolled',
-      current_grade: 'A',
-      current_score: 100.0,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'c4',
-      canvas_id: 92604,
-      course_code: 'STDV 101',
-      name: 'Path to Academic Strategies and Student Success',
-      term: 'Spring 2026',
-      term_order: 1,
-      units: 1.0,
-      instructor: 'GCC Counseling Department',
-      status: 'enrolled',
-      current_grade: 'A',
-      current_score: 96.0,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'c5',
-      canvas_id: 92605,
-      course_code: 'AT 122',
-      name: 'Aviation Meteorology (Replaced with Grade A)',
-      term: 'Spring 2026',
-      term_order: 1,
-      units: 3.0,
-      instructor: 'Prof. D. Scott',
-      status: 'enrolled',
-      current_grade: 'A',
-      current_score: 97.0,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'c6',
-      canvas_id: 92606,
-      course_code: 'AT 124',
-      name: 'Radio/Flight Regulations & Procedures',
-      term: 'Spring 2026',
-      term_order: 1,
-      units: 3.0,
-      instructor: 'Capt. R. Miller',
-      status: 'enrolled',
-      current_grade: 'C',
-      current_score: 78.0,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
+    // Fall 2019
+    { id: '1', canvas_id: 91901, course_code: 'ST DV 103', name: 'International Students Orientation', term: 'Fall 2019', term_order: 1, units: 1.0, instructor: 'Student Development', status: 'completed', current_grade: 'P', current_score: 100.0, created_at: '', updated_at: '' },
+    { id: '2', canvas_id: 91902, course_code: 'ESL 123', name: 'Grammar & Writing II (Academic Renewal)', term: 'Fall 2019', term_order: 1, units: 5.0, instructor: 'ESL Department', status: 'completed', current_grade: 'AR', current_score: null, created_at: '', updated_at: '' },
+    { id: '3', canvas_id: 91903, course_code: 'ESL 125', name: 'Listening & Speaking II', term: 'Fall 2019', term_order: 1, units: 4.0, instructor: 'ESL Department', status: 'completed', current_grade: 'B', current_score: 85.0, created_at: '', updated_at: '' },
+    { id: '4', canvas_id: 91904, course_code: 'ESL 126', name: 'Reading & Vocabulary for ESL II', term: 'Fall 2019', term_order: 1, units: 3.0, instructor: 'ESL Department', status: 'completed', current_grade: 'C', current_score: 75.0, created_at: '', updated_at: '' },
+    // Winter 2020
+    { id: '5', canvas_id: 92001, course_code: 'ESL 133', name: 'Grammar & Writing III', term: 'Winter 2020', term_order: 2, units: 5.0, instructor: 'ESL Department', status: 'completed', current_grade: 'C', current_score: 78.0, created_at: '', updated_at: '' },
+    { id: '6', canvas_id: 92002, course_code: 'ESL 136', name: 'Reading & Vocabulary III', term: 'Winter 2020', term_order: 2, units: 3.0, instructor: 'ESL Department', status: 'completed', current_grade: 'A', current_score: 94.0, created_at: '', updated_at: '' },
+    // Spring 2020
+    { id: '7', canvas_id: 92003, course_code: 'MATH 90+', name: 'Inter Alg for BSTEM w/ Support (Excluded)', term: 'Spring 2020', term_order: 3, units: 6.5, instructor: 'Mathematics Dept', status: 'completed', current_grade: 'AR', current_score: null, created_at: '', updated_at: '' },
+    { id: '8', canvas_id: 92004, course_code: 'ESL 141', name: 'Grammar & Writing IV (Academic Renewal)', term: 'Spring 2020', term_order: 3, units: 5.0, instructor: 'ESL Department', status: 'completed', current_grade: 'AR', current_score: null, created_at: '', updated_at: '' },
+    { id: '9', canvas_id: 92005, course_code: 'AT 120', name: 'Private Pilot Ground School (FAA Written Prep)', term: 'Spring 2020', term_order: 3, units: 5.0, instructor: 'Capt. R. Miller, CFI/CFII', status: 'completed', current_grade: 'A', current_score: 95.0, created_at: '', updated_at: '' },
+    // Fall 2020
+    { id: '10', canvas_id: 92006, course_code: 'ENGL 101', name: 'Intro College Reading & Comp (Repeated LACC)', term: 'Fall 2020', term_order: 4, units: 4.0, instructor: 'English Department', status: 'completed', current_grade: 'AR', current_score: null, created_at: '', updated_at: '' },
+    { id: '11', canvas_id: 92007, course_code: 'AT 123', name: 'Aerodynamics', term: 'Fall 2020', term_order: 4, units: 3.0, instructor: 'Aviation Faculty', status: 'completed', current_grade: 'C', current_score: 76.5, created_at: '', updated_at: '' },
+    { id: '12', canvas_id: 92008, course_code: 'MUSIC 121', name: 'History Of Rock Music', term: 'Fall 2020', term_order: 4, units: 3.0, instructor: 'Music Department', status: 'completed', current_grade: 'A', current_score: 96.0, created_at: '', updated_at: '' },
+    { id: '13', canvas_id: 92009, course_code: 'AT 121', name: 'Aviation Navigation & Flight Planning', term: 'Fall 2020', term_order: 4, units: 3.0, instructor: 'Aviation Faculty', status: 'completed', current_grade: 'B', current_score: 86.0, created_at: '', updated_at: '' },
+    // Winter 2021
+    { id: '14', canvas_id: 92101, course_code: 'SPCH 101', name: 'Public Speaking (ZTC Zero Textbook Cost)', term: 'Winter 2021', term_order: 5, units: 3.0, instructor: 'Communication Studies', status: 'completed', current_grade: 'C', current_score: 77.0, created_at: '', updated_at: '' },
+    // Spring 2021
+    { id: '15', canvas_id: 92102, course_code: 'MATH 90+', name: 'Inter Alg for BSTEM w/ Support (Excluded)', term: 'Spring 2021', term_order: 6, units: 6.5, instructor: 'Mathematics Dept', status: 'completed', current_grade: 'AR', current_score: null, created_at: '', updated_at: '' },
+    { id: '16', canvas_id: 92103, course_code: 'AT 122', name: 'Meteorology (Repeated in Sp 2026)', term: 'Spring 2021', term_order: 6, units: 3.0, instructor: 'Aviation Faculty', status: 'completed', current_grade: 'AR', current_score: null, created_at: '', updated_at: '' },
+    { id: '17', canvas_id: 92104, course_code: 'ENGL 102', name: 'Critical Thinking/Lit (Academic Renewal)', term: 'Spring 2021', term_order: 6, units: 3.0, instructor: 'English Department', status: 'completed', current_grade: 'AR', current_score: null, created_at: '', updated_at: '' },
+    { id: '18', canvas_id: 92105, course_code: 'CHEM 110', name: 'Elements Gen Chem (Academic Renewal)', term: 'Spring 2021', term_order: 6, units: 5.0, instructor: 'Chemistry Dept', status: 'completed', current_grade: 'AR', current_score: null, created_at: '', updated_at: '' },
+    // Fall 2021
+    { id: '19', canvas_id: 92106, course_code: 'MATH 90+', name: 'Inter Alg for BSTEM (Academic Renewal)', term: 'Fall 2021', term_order: 7, units: 6.5, instructor: 'Mathematics Dept', status: 'completed', current_grade: 'AR', current_score: null, created_at: '', updated_at: '' },
+    { id: '20', canvas_id: 92107, course_code: 'AT 124', name: 'Radio/Flight Regulations & Procedures', term: 'Fall 2021', term_order: 7, units: 3.0, instructor: 'Aviation Faculty', status: 'completed', current_grade: 'C', current_score: 78.0, created_at: '', updated_at: '' },
+    { id: '21', canvas_id: 92108, course_code: 'ESL 141', name: 'Grammar & Writing IV (Academic Renewal)', term: 'Fall 2021', term_order: 7, units: 5.0, instructor: 'ESL Department', status: 'completed', current_grade: 'AR', current_score: null, created_at: '', updated_at: '' },
+    // Spring 2026 (Active)
+    { id: '22', canvas_id: 92601, course_code: 'AT 122', name: 'Aviation Meteorology (Replaced with Grade A)', term: 'Spring 2026', term_order: 8, units: 3.0, instructor: 'Prof. D. Scott, Aviation', status: 'completed', current_grade: 'A', current_score: 97.0, created_at: '', updated_at: '' },
+    { id: '23', canvas_id: 92602, course_code: 'AT 121L', name: 'Private Pilot Flight Lab I (Whiteman KPOC)', term: 'Spring 2026', term_order: 8, units: 2.0, instructor: 'Chief Flight Instructor', status: 'enrolled', current_grade: 'A', current_score: 98.0, created_at: '', updated_at: '' },
+    { id: '24', canvas_id: 92603, course_code: 'IND T', name: 'Industrial Technology & Aviation Pathway', term: 'Spring 2026', term_order: 8, units: 1.0, instructor: 'Tech & Aviation Division', status: 'enrolled', current_grade: 'A', current_score: 100.0, created_at: '', updated_at: '' },
+    { id: '25', canvas_id: 92604, course_code: 'STDV 101', name: 'Path to Academic Strategies and Student Success', term: 'Spring 2026', term_order: 8, units: 1.0, instructor: 'GCC Counseling Dept', status: 'enrolled', current_grade: 'A', current_score: 96.0, created_at: '', updated_at: '' },
   ];
 
   const defaultAssignments: Assignment[] = [
     {
       id: 'a1',
       canvas_id: 800101,
-      course_id: 'c1',
+      course_id: '22',
       name: 'Weight & Balance Calculation Matrix (Cessna 172S)',
       description: 'Calculate center of gravity and moment arms for standard fuel and passenger loading before cross-country flight.',
       due_at: '2026-11-14T23:59:00Z',
@@ -155,7 +95,7 @@ export default function StudentSkyDashboard() {
     {
       id: 'a2',
       canvas_id: 800102,
-      course_id: 'c1',
+      course_id: '22',
       name: 'Sectional Chart & Airspace VFR Navigation Log (KPOC to KSZP)',
       description: 'Plot VFR flight plan avoiding Burbank Class C airspace and mountainous terrain with wind correction angles.',
       due_at: '2026-11-18T23:59:00Z',
@@ -170,7 +110,7 @@ export default function StudentSkyDashboard() {
     {
       id: 'a3',
       canvas_id: 800103,
-      course_id: 'c2',
+      course_id: '23',
       name: 'Pre-Solo Written Examination Verification',
       description: 'Endorsement review with Chief Flight Instructor covering emergency glide speeds and runway incursions.',
       due_at: '2026-11-20T23:59:00Z',
@@ -179,36 +119,6 @@ export default function StudentSkyDashboard() {
       score: null,
       risk_level: 'WATCH',
       risk_reason: 'Flight lab requirement before solo pattern endorsement.',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'a4',
-      canvas_id: 800104,
-      course_id: 'c3',
-      name: 'Aviation Industry Safety Management Systems (SMS) Reflection',
-      description: 'Analysis of human factors and cockpit resource management (CRM) principles.',
-      due_at: '2026-11-26T23:59:00Z',
-      points_possible: 25.0,
-      submission_status: 'unsubmitted',
-      score: null,
-      risk_level: 'WATCH',
-      risk_reason: 'Discussion assignment due in 12 days.',
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-    },
-    {
-      id: 'a5',
-      canvas_id: 800105,
-      course_id: 'c5',
-      name: 'Meteorological Weather Briefing & METAR/TAF Decoding',
-      description: 'Real-time weather decoding for southern California airports including KLAX, KBUR, and KPOC.',
-      due_at: '2026-12-18T23:59:00Z',
-      points_possible: 200.0,
-      submission_status: 'unsubmitted',
-      score: null,
-      risk_level: 'WATCH',
-      risk_reason: 'Final comprehensive aviation weather assessment.',
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
     },
@@ -316,17 +226,6 @@ export default function StudentSkyDashboard() {
     },
   ];
 
-  const defaultSyncLog: SyncLog = {
-    id: 's1',
-    provider: 'GCC_CANVAS',
-    synced_at: new Date().toISOString(),
-    status: 'SUCCESS',
-    courses_synced: 6,
-    assignments_synced: 18,
-    announcements_synced: 24,
-    error_message: null,
-  };
-
   const loadData = async () => {
     setIsLoading(true);
     try {
@@ -354,15 +253,12 @@ export default function StudentSkyDashboard() {
       const { data: sData } = await supabase.from('sync_logs').select('*').order('synced_at', { ascending: false }).limit(1).single();
       if (sData) {
         setLastSync(sData);
-      } else {
-        setLastSync(defaultSyncLog);
       }
     } catch (err) {
       console.warn('Using default seed view state:', err);
       setCourses(defaultCourses);
       setAssignments(defaultAssignments);
       setAnnouncements(defaultAnnouncements);
-      setLastSync(defaultSyncLog);
     } finally {
       setIsLoading(false);
     }
@@ -372,31 +268,54 @@ export default function StudentSkyDashboard() {
     loadData();
   }, []);
 
-  const enrolledCourses = courses.filter(c => c.status === 'enrolled');
-
-  // Terms bar matching image 1
+  // CHRONOLOGICAL TERM TABS (STARTING FROM 2019 FALL AS REQUESTED!)
   const termTabs = [
     { name: 'Home', locked: false, isHome: true },
-    { name: 'Spring 2026', locked: true, isHome: false },
-    { name: 'Summer 2026', locked: true, isHome: false },
+    { name: 'Fall 2019', locked: true, isHome: false },
+    { name: 'Winter 2020', locked: true, isHome: false },
+    { name: 'Spring 2020', locked: true, isHome: false },
+    { name: 'Fall 2020', locked: true, isHome: false },
+    { name: 'Winter 2021', locked: true, isHome: false },
+    { name: 'Spring 2021', locked: true, isHome: false },
+    { name: 'Fall 2021', locked: true, isHome: false },
+    { name: 'Spring 2026', locked: false, isHome: false, isActive: true },
+    { name: 'Summer 2026', locked: false, isHome: false },
     { name: 'Fall 2026', locked: false, isHome: false },
     { name: 'Winter 2027', locked: false, isHome: false },
     { name: 'Spring 2027', locked: false, isHome: false },
   ];
+
+  // Dynamic filter based on selected term
+  const selectedTermCourses = courses.filter((c) => {
+    if (selectedTerm === 'Home') return true;
+    return c.term.toLowerCase() === selectedTerm.toLowerCase();
+  });
+
+  const enrolledCourses = courses.filter(c => c.status === 'enrolled');
+
+  // GPA calculation excluding AR and P
+  const calculateTermStats = () => {
+    const list = selectedTermCourses;
+    const earnedUnits = list.reduce((acc, c) => (c.current_grade !== 'AR' ? acc + Number(c.units) : acc), 0);
+    const arCoursesCount = list.filter(c => c.current_grade === 'AR').length;
+    return { earnedUnits, arCoursesCount, count: list.length };
+  };
+
+  const termStats = calculateTermStats();
 
   return (
     <div className="min-h-screen bg-[#FBFBFA] text-[#1E293B]">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         
         {/* ============================================================== */}
-        {/* 1. TOP TERM NAVIGATION BAR (MATCHING IMAGE 1)                  */}
+        {/* 1. TOP TERM NAVIGATION BAR (STARTING FROM 2019 FALL!)         */}
         {/* ============================================================== */}
         <div className="mb-6 flex items-center space-x-1.5 overflow-x-auto rounded-xl bg-white p-1.5 shadow-xs border border-gray-200/80">
           {termTabs.map((tab) => (
             <button
               key={tab.name}
               onClick={() => setSelectedTerm(tab.name)}
-              className={`inline-flex items-center space-x-1.5 whitespace-nowrap rounded-lg px-4 py-2 text-xs font-semibold transition ${
+              className={`inline-flex items-center space-x-1.5 whitespace-nowrap rounded-lg px-3.5 py-2 text-xs font-semibold transition ${
                 selectedTerm === tab.name
                   ? 'bg-[#0F172A] text-white shadow-xs'
                   : 'text-gray-600 hover:bg-gray-100/80 hover:text-gray-900'
@@ -405,18 +324,19 @@ export default function StudentSkyDashboard() {
               {tab.isHome && <Compass className="h-3.5 w-3.5" />}
               <span>{tab.name}</span>
               {tab.locked && <Lock className="h-3 w-3 text-amber-500" />}
+              {tab.isActive && <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />}
             </button>
           ))}
         </div>
 
         {/* ============================================================== */}
-        {/* 2. MAIN HEADER CARD (MATCHING IMAGE 1)                        */}
+        {/* 2. MAIN HEADER CARD                                            */}
         {/* ============================================================== */}
         <div className="mb-6 rounded-2xl bg-white p-6 shadow-xs border border-gray-200/80">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div>
               <div className="text-[11px] font-bold uppercase tracking-wider text-[#0D9488]">
-                STUDENT SKY · SPRING 2026
+                STUDENT SKY · {selectedTerm === 'Home' ? 'FALL 2019 - SPRING 2026' : selectedTerm.toUpperCase()}
               </div>
               <h1 className="mt-1 text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
                 Associate of Science in Aviation and Transportation - Pilot Training
@@ -439,7 +359,7 @@ export default function StudentSkyDashboard() {
                 Last synced Nov 14, 06:00
               </p>
               <p className="text-[11px] text-gray-400 mt-0.5">
-                6 courses · 43 assignments · GCC Canvas API
+                {courses.length} courses tracked · GCC Canvas API
               </p>
               <button
                 onClick={() => setIsSyncModalOpen(true)}
@@ -453,50 +373,50 @@ export default function StudentSkyDashboard() {
         </div>
 
         {/* ============================================================== */}
-        {/* 3. FOUR KEY STAT METRIC CARDS (MATCHING IMAGE 1)               */}
+        {/* 3. FOUR KEY STAT METRIC CARDS                                 */}
         {/* ============================================================== */}
         <div className="mb-6 grid grid-cols-2 gap-4 sm:grid-cols-4">
           <div className="rounded-2xl bg-white p-5 shadow-xs border border-gray-200/80">
             <div className="flex items-center space-x-2 text-xs font-medium text-gray-500">
               <BookOpen className="h-3.5 w-3.5 text-sky-600" />
-              <span>Term courses</span>
+              <span>{selectedTerm === 'Home' ? 'Total courses' : 'Term courses'}</span>
             </div>
-            <div className="mt-2 text-3xl font-extrabold text-slate-900">{enrolledCourses.length || 6}</div>
+            <div className="mt-2 text-3xl font-extrabold text-slate-900">{termStats.count}</div>
           </div>
 
           <div className="rounded-2xl bg-white p-5 shadow-xs border border-gray-200/80">
             <div className="flex items-center space-x-2 text-xs font-medium text-gray-500">
-              <Calendar className="h-3.5 w-3.5 text-indigo-600" />
-              <span>Due in 7 days</span>
+              <GraduationCap className="h-3.5 w-3.5 text-indigo-600" />
+              <span>Units Earned</span>
             </div>
-            <div className="mt-2 text-3xl font-extrabold text-slate-900">1</div>
+            <div className="mt-2 text-3xl font-extrabold text-slate-900">{termStats.earnedUnits.toFixed(1)}</div>
           </div>
 
           <div className="rounded-2xl bg-white p-5 shadow-xs border border-gray-200/80">
             <div className="flex items-center space-x-2 text-xs font-medium text-gray-500">
-              <AlertTriangle className="h-3.5 w-3.5 text-amber-500" />
-              <span>At risk</span>
+              <AlertTriangle className="h-3.5 w-3.5 text-purple-600" />
+              <span>AR (Alleviated)</span>
             </div>
-            <div className="mt-2 text-3xl font-extrabold text-slate-900">3</div>
+            <div className="mt-2 text-3xl font-extrabold text-purple-700">{termStats.arCoursesCount}</div>
           </div>
 
           <div className="rounded-2xl bg-white p-5 shadow-xs border border-gray-200/80">
             <div className="flex items-center space-x-2 text-xs font-medium text-gray-500">
               <Clock className="h-3.5 w-3.5 text-emerald-600" />
-              <span>Next due</span>
+              <span>Status</span>
             </div>
-            <div className="mt-2 text-lg sm:text-xl font-extrabold text-slate-900 truncate">
-              Nov 14, 23:59
+            <div className="mt-2 text-base sm:text-lg font-extrabold text-slate-900 truncate">
+              {selectedTerm === 'Home' || selectedTerm === 'Spring 2026' ? 'Active Term' : 'Locked Archive 🔒'}
             </div>
           </div>
         </div>
 
         {/* ============================================================== */}
-        {/* 4. THREE-COLUMN WIDGET GRID (MATCHING IMAGE 1)                */}
+        {/* 4. THREE-COLUMN WIDGET GRID                                   */}
         {/* ============================================================== */}
         <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-3">
           
-          {/* Card 1: CANVAS WATCH (Amber/Yellow header) */}
+          {/* Card 1: CANVAS WATCH */}
           <div className="rounded-2xl border border-amber-200/70 bg-[#FEFDF5] p-5 shadow-xs">
             <div className="flex items-center justify-between border-b border-amber-200/60 pb-3">
               <div>
@@ -543,7 +463,7 @@ export default function StudentSkyDashboard() {
             </div>
           </div>
 
-          {/* Card 2: COLLEGE NEWS (Blue header) */}
+          {/* Card 2: COLLEGE NEWS */}
           <div className="rounded-2xl border border-blue-200/70 bg-[#F8FAFC] p-5 shadow-xs">
             <div className="flex items-center justify-between border-b border-blue-200/60 pb-3">
               <div>
@@ -570,7 +490,7 @@ export default function StudentSkyDashboard() {
                       <span className="font-bold text-blue-800 bg-blue-50 px-2 py-0.5 rounded border border-blue-100">
                         {ann.badge || 'News'}
                       </span>
-                      <span className="text-gray-400">Winter & Spring 2027</span>
+                      <span className="text-gray-400">GCC Campus</span>
                     </div>
                     <h4 className="mt-1.5 text-sm font-bold text-slate-900">{ann.title}</h4>
                     <p className="mt-1 text-xs text-gray-600 line-clamp-2">{ann.content}</p>
@@ -587,7 +507,7 @@ export default function StudentSkyDashboard() {
             </div>
           </div>
 
-          {/* Card 3: SCHOLARSHIP (Green header) */}
+          {/* Card 3: SCHOLARSHIP */}
           <div className="rounded-2xl border border-emerald-200/70 bg-[#F7FDF9] p-5 shadow-xs">
             <div className="flex items-center justify-between border-b border-emerald-200/60 pb-3">
               <div>
@@ -635,7 +555,7 @@ export default function StudentSkyDashboard() {
         </div>
 
         {/* ============================================================== */}
-        {/* 5. SHORT RANGE FOCUS & THIS WEEK (MATCHING IMAGE 2)            */}
+        {/* 5. FOCUS & WEEKLY CLASS SCHEDULE                              */}
         {/* ============================================================== */}
         <div className="mb-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
           
@@ -674,7 +594,7 @@ export default function StudentSkyDashboard() {
           <div className="rounded-2xl bg-white p-6 shadow-xs border border-gray-200/80">
             <h3 className="text-lg font-bold text-slate-900">This Week</h3>
             <p className="mt-1 text-xs text-gray-500">
-              Python starts. Protect fixed weekly study blocks and submit early.
+              Flight training starts. Protect fixed weekly study blocks and submit early.
             </p>
 
             <div className="mt-4 space-y-3 text-xs">
@@ -705,9 +625,7 @@ export default function StudentSkyDashboard() {
           </div>
         </div>
 
-        {/* ============================================================== */}
-        {/* 6. WEEKLY CLASS SCHEDULE (MATCHING IMAGE 2)                   */}
-        {/* ============================================================== */}
+        {/* Weekly Class Schedule */}
         <div className="mb-6 rounded-2xl bg-white p-6 shadow-xs border border-gray-200/80">
           <div className="flex items-center justify-between border-b border-gray-100 pb-3">
             <div>
@@ -719,15 +637,12 @@ export default function StudentSkyDashboard() {
             <Calendar className="h-4 w-4 text-teal-600" />
           </div>
 
-          {/* Day Grid Sun - Sat */}
           <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-7 gap-3 text-xs">
-            {/* Sun */}
             <div className="rounded-xl border border-gray-100 bg-gray-50/40 p-3">
               <div className="font-bold text-rose-600">Sun</div>
               <div className="mt-3 text-[11px] text-gray-400">No fixed class block</div>
             </div>
 
-            {/* Mon */}
             <div className="rounded-xl border border-gray-100 bg-white p-3 space-y-2">
               <div className="font-bold text-slate-700">Mon</div>
               <div className="rounded-lg bg-gray-50 p-2 border border-gray-100">
@@ -748,7 +663,6 @@ export default function StudentSkyDashboard() {
               </div>
             </div>
 
-            {/* Tue */}
             <div className="rounded-xl border border-gray-100 bg-white p-3">
               <div className="font-bold text-slate-700">Tue</div>
               <div className="mt-2 rounded-lg bg-gray-50 p-2 border border-gray-100">
@@ -761,7 +675,6 @@ export default function StudentSkyDashboard() {
               </div>
             </div>
 
-            {/* Wed */}
             <div className="rounded-xl border border-gray-100 bg-white p-3">
               <div className="font-bold text-slate-700">Wed</div>
               <div className="mt-2 rounded-lg bg-gray-50 p-2 border border-gray-100">
@@ -774,19 +687,16 @@ export default function StudentSkyDashboard() {
               </div>
             </div>
 
-            {/* Thu */}
             <div className="rounded-xl border border-gray-100 bg-gray-50/40 p-3">
               <div className="font-bold text-slate-700">Thu</div>
               <div className="mt-3 text-[11px] text-gray-400">No fixed class block</div>
             </div>
 
-            {/* Fri */}
             <div className="rounded-xl border border-gray-100 bg-gray-50/40 p-3">
               <div className="font-bold text-slate-700">Fri</div>
               <div className="mt-3 text-[11px] text-gray-400">No fixed class block</div>
             </div>
 
-            {/* Sat (Highlighted Today in Teal!) */}
             <div className="rounded-xl border-2 border-teal-400 bg-teal-50/20 p-3 relative">
               <div className="flex items-center justify-between">
                 <span className="font-bold text-slate-900">Sat</span>
@@ -803,7 +713,6 @@ export default function StudentSkyDashboard() {
             </div>
           </div>
 
-          {/* Asynchronous / Self-Paced Row */}
           <div className="mt-4 pt-3 border-t border-gray-100 flex items-center space-x-3 text-xs">
             <span className="font-bold text-slate-700">Asynchronous / Self-Paced:</span>
             <div className="flex items-center space-x-2">
@@ -818,11 +727,9 @@ export default function StudentSkyDashboard() {
         </div>
 
         {/* ============================================================== */}
-        {/* 7. PRIORITY QUEUE + PIPELINE (MATCHING IMAGES 3 & 4)          */}
+        {/* 6. WHAT SHOULD I DO NOW? & PIPELINE                           */}
         {/* ============================================================== */}
         <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
-          
-          {/* LEFT: What Should I Do Now? (2/3 Columns) */}
           <div className="lg:col-span-2 rounded-2xl bg-white p-6 shadow-xs border border-gray-200/80">
             <div className="flex items-start justify-between border-b border-gray-100 pb-4">
               <div>
@@ -837,7 +744,6 @@ export default function StudentSkyDashboard() {
               </span>
             </div>
 
-            {/* Assignment Cards List */}
             <div className="mt-5 space-y-4">
               {assignments.map((task) => (
                 <div
@@ -910,10 +816,8 @@ export default function StudentSkyDashboard() {
             </div>
           </div>
 
-          {/* RIGHT: SUBMIT PROOF + KANBAN SNAPSHOT + LAB NOTES (1/3 Column) */}
+          {/* Right Cards */}
           <div className="space-y-6">
-            
-            {/* 1. SUBMIT PROOF */}
             <div className="rounded-2xl bg-white p-5 shadow-xs border border-gray-200/80">
               <div className="text-[11px] font-bold uppercase tracking-wider text-teal-700 flex items-center space-x-1">
                 <CheckSquare className="h-3.5 w-3.5" />
@@ -949,11 +853,10 @@ export default function StudentSkyDashboard() {
               </div>
             </div>
 
-            {/* 2. KANBAN SNAPSHOT */}
             <div className="rounded-2xl bg-white p-5 shadow-xs border border-gray-200/80">
               <h3 className="text-sm font-bold text-slate-900">Kanban Snapshot</h3>
               <p className="text-xs text-gray-500 mt-0.5">
-                A quick pipeline view of where each live Canvas assignment stands before it is submitted and graded.
+                Pipeline view of live Canvas assignments.
               </p>
 
               <div className="mt-4 space-y-2 text-xs divide-y divide-gray-50">
@@ -962,52 +865,22 @@ export default function StudentSkyDashboard() {
                   <span className="font-bold">6</span>
                 </div>
                 <div className="flex justify-between py-1 text-slate-700">
-                  <span>Acknowledged</span>
-                  <span className="font-bold">0</span>
-                </div>
-                <div className="flex justify-between py-1 text-slate-700">
-                  <span>Started</span>
-                  <span className="font-bold">0</span>
-                </div>
-                <div className="flex justify-between py-1 text-slate-700">
-                  <span>Ready for Audit</span>
-                  <span className="font-bold">0</span>
-                </div>
-                <div className="flex justify-between py-1 text-slate-700">
-                  <span>AI Audited</span>
-                  <span className="font-bold">0</span>
-                </div>
-                <div className="flex justify-between py-1 text-slate-700">
-                  <span>Ready to Submit</span>
-                  <span className="font-bold">0</span>
-                </div>
-                <div className="flex justify-between py-1 text-slate-700">
                   <span>Marked Submitted</span>
                   <span className="font-bold text-emerald-700">2</span>
-                </div>
-                <div className="flex justify-between py-1 text-slate-700">
-                  <span>Canvas Confirmed</span>
-                  <span className="font-bold">0</span>
                 </div>
                 <div className="flex justify-between py-1 text-slate-700">
                   <span>Graded</span>
                   <span className="font-bold">0</span>
                 </div>
-                <div className="flex justify-between py-1 text-slate-700">
-                  <span>Cancelled</span>
-                  <span className="font-bold">0</span>
-                </div>
               </div>
             </div>
 
-            {/* 3. LAB NOTES (MATCHING IMAGE 4 TERMINAL BOX) */}
             <div className="rounded-2xl bg-white p-5 shadow-xs border border-gray-200/80">
               <h3 className="text-sm font-bold text-slate-900">Lab Notes</h3>
               <p className="text-xs text-gray-500 mt-0.5">
-                Starter API is ready for flight & lab notes. First target: preflight checklists, maneuvers, flight hours, and CFI proof.
+                Flight notes ready. First target: preflight checklists, maneuvers, and CFI proof.
               </p>
 
-              {/* Dark Terminal Box */}
               <div className="mt-3 rounded-xl bg-[#0F172A] p-4 font-mono text-xs text-slate-200 space-y-1">
                 <div className="text-emerald-400">labs tracked: 3</div>
                 <div className="text-slate-400 text-[11px] leading-relaxed">
@@ -1022,30 +895,29 @@ export default function StudentSkyDashboard() {
                 + Log Flight Sortie Entry
               </button>
             </div>
-
           </div>
         </div>
 
         {/* ============================================================== */}
-        {/* 8. HISTORICAL & DEGREE PATHWAY COURSES TABLE (WITH AR BADGES)   */}
+        {/* 7. DYNAMIC TERM COURSEWORK GRID (CHANGES WITH SELECTED TERM!)   */}
         {/* ============================================================== */}
         <div className="mt-6 rounded-2xl bg-white p-6 shadow-xs border border-gray-200/80">
           <div className="flex items-center justify-between border-b border-gray-100 pb-4">
             <div>
               <h3 className="text-lg font-bold text-slate-900">
-                GCC Curriculum & Transcript History
+                {selectedTerm === 'Home' ? 'All Transcript Courses (2019 Fall - 2026 Spring)' : `${selectedTerm} Courses & Grades`}
               </h3>
               <p className="text-xs text-gray-500 mt-0.5">
-                Associate of Science in Aviation and Transportation - Pilot Training (All terms & Academic Renewal records)
+                Official Glendale Community College Records · Associate of Science in Aviation and Transportation - Pilot Training
               </p>
             </div>
             <span className="text-xs font-semibold text-gray-500">
-              {courses.length} courses total
+              {selectedTermCourses.length} courses in this view
             </span>
           </div>
 
           <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3">
-            {courses.map((c) => (
+            {selectedTermCourses.map((c) => (
               <div
                 key={c.id}
                 className="rounded-xl border border-gray-200/70 p-4 hover:border-sky-300 hover:shadow-xs transition bg-white flex flex-col justify-between"
@@ -1090,7 +962,7 @@ export default function StudentSkyDashboard() {
           </div>
         </div>
 
-        {/* MODALS */}
+        {/* Modals */}
         <SyncConsoleModal
           isOpen={isSyncModalOpen}
           onClose={() => setIsSyncModalOpen(false)}

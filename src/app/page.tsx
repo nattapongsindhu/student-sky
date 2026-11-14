@@ -15,11 +15,12 @@ import {
   Sparkles,
   Bookmark,
   CheckCircle2,
-  Lock,
   CalendarCheck,
   CheckSquare,
   Layers,
-  GraduationCap
+  GraduationCap,
+  Medal,
+  Star
 } from 'lucide-react';
 import { supabase } from '@/lib/supabase/client';
 import { Course, Assignment, Announcement, FlightLabLog, SyncLog } from '@/types';
@@ -268,21 +269,21 @@ export default function StudentSkyDashboard() {
     loadData();
   }, []);
 
-  // CHRONOLOGICAL TERM TABS (STARTING FROM 2019 FALL AS REQUESTED!)
+  // CHRONOLOGICAL TERM TABS WITH THE DEAN'S HONOR LIST GOLDEN MEDAL!
   const termTabs = [
-    { name: 'Home', locked: false, isHome: true },
-    { name: 'Fall 2019', locked: true, isHome: false },
-    { name: 'Winter 2020', locked: true, isHome: false },
-    { name: 'Spring 2020', locked: true, isHome: false },
-    { name: 'Fall 2020', locked: true, isHome: false },
-    { name: 'Winter 2021', locked: true, isHome: false },
-    { name: 'Spring 2021', locked: true, isHome: false },
-    { name: 'Fall 2021', locked: true, isHome: false },
-    { name: 'Spring 2026', locked: false, isHome: false, isActive: true },
-    { name: 'Summer 2026', locked: false, isHome: false },
-    { name: 'Fall 2026', locked: false, isHome: false },
-    { name: 'Winter 2027', locked: false, isHome: false },
-    { name: 'Spring 2027', locked: false, isHome: false },
+    { name: 'Home', isHome: true, deansHonor: false },
+    { name: 'Fall 2019', isHome: false, deansHonor: false },
+    { name: 'Winter 2020', isHome: false, deansHonor: false },
+    { name: 'Spring 2020', isHome: false, deansHonor: false },
+    { name: 'Fall 2020', isHome: false, deansHonor: false },
+    { name: 'Winter 2021', isHome: false, deansHonor: false },
+    { name: 'Spring 2021', isHome: false, deansHonor: false },
+    { name: 'Fall 2021', isHome: false, deansHonor: false },
+    { name: 'Spring 2026', isHome: false, deansHonor: true, isActive: true },
+    { name: 'Summer 2026', isHome: false, deansHonor: true },
+    { name: 'Fall 2026', isHome: false, deansHonor: true },
+    { name: 'Winter 2027', isHome: false, deansHonor: false },
+    { name: 'Spring 2027', isHome: false, deansHonor: false },
   ];
 
   // Dynamic filter based on selected term
@@ -293,7 +294,7 @@ export default function StudentSkyDashboard() {
 
   const enrolledCourses = courses.filter(c => c.status === 'enrolled');
 
-  // GPA calculation excluding AR and P
+  // GPA & Unit calculation
   const calculateTermStats = () => {
     const list = selectedTermCourses;
     const earnedUnits = list.reduce((acc, c) => (c.current_grade !== 'AR' ? acc + Number(c.units) : acc), 0);
@@ -302,13 +303,14 @@ export default function StudentSkyDashboard() {
   };
 
   const termStats = calculateTermStats();
+  const currentTab = termTabs.find(t => t.name === selectedTerm);
 
   return (
     <div className="min-h-screen bg-[#FBFBFA] text-[#1E293B]">
       <div className="mx-auto max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
         
         {/* ============================================================== */}
-        {/* 1. TOP TERM NAVIGATION BAR (STARTING FROM 2019 FALL!)         */}
+        {/* 1. TOP TERM NAVIGATION BAR (WITH THE DEAN'S HONOR MEDAL!)     */}
         {/* ============================================================== */}
         <div className="mb-6 flex items-center space-x-1.5 overflow-x-auto rounded-xl bg-white p-1.5 shadow-xs border border-gray-200/80">
           {termTabs.map((tab) => (
@@ -323,20 +325,32 @@ export default function StudentSkyDashboard() {
             >
               {tab.isHome && <Compass className="h-3.5 w-3.5" />}
               <span>{tab.name}</span>
-              {tab.locked && <Lock className="h-3 w-3 text-amber-500" />}
+              {tab.deansHonor && (
+                <span title="The Dean's Honor List · 4.00 GPA" className="inline-flex items-center">
+                  <Award className="h-3.5 w-3.5 text-amber-500 fill-amber-400/20" />
+                </span>
+              )}
               {tab.isActive && <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />}
             </button>
           ))}
         </div>
 
         {/* ============================================================== */}
-        {/* 2. MAIN HEADER CARD                                            */}
+        {/* 2. MAIN HEADER CARD (WITH THE DEAN'S HONOR LIST BADGE!)       */}
         {/* ============================================================== */}
         <div className="mb-6 rounded-2xl bg-white p-6 shadow-xs border border-gray-200/80">
           <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-4">
             <div>
-              <div className="text-[11px] font-bold uppercase tracking-wider text-[#0D9488]">
-                STUDENT SKY · {selectedTerm === 'Home' ? 'FALL 2019 - SPRING 2026' : selectedTerm.toUpperCase()}
+              <div className="flex items-center space-x-2">
+                <span className="text-[11px] font-bold uppercase tracking-wider text-[#0D9488]">
+                  STUDENT SKY · {selectedTerm === 'Home' ? 'FALL 2019 - SPRING 2026' : selectedTerm.toUpperCase()}
+                </span>
+                {(currentTab?.deansHonor || selectedTerm === 'Home') && (
+                  <span className="inline-flex items-center space-x-1 text-[11px] font-bold text-amber-800 bg-amber-50 px-2.5 py-0.5 rounded-full border border-amber-200">
+                    <Award className="h-3 w-3 text-amber-600" />
+                    <span>The Dean&apos;s Honor List · 4.00 GPA</span>
+                  </span>
+                )}
               </div>
               <h1 className="mt-1 text-2xl sm:text-3xl font-extrabold tracking-tight text-slate-900">
                 Associate of Science in Aviation and Transportation - Pilot Training
@@ -394,19 +408,21 @@ export default function StudentSkyDashboard() {
 
           <div className="rounded-2xl bg-white p-5 shadow-xs border border-gray-200/80">
             <div className="flex items-center space-x-2 text-xs font-medium text-gray-500">
-              <AlertTriangle className="h-3.5 w-3.5 text-purple-600" />
-              <span>AR (Alleviated)</span>
+              <Award className="h-3.5 w-3.5 text-amber-500" />
+              <span>Academic Honor</span>
             </div>
-            <div className="mt-2 text-3xl font-extrabold text-purple-700">{termStats.arCoursesCount}</div>
+            <div className="mt-2 text-base sm:text-lg font-extrabold text-amber-700 truncate">
+              {currentTab?.deansHonor || selectedTerm === 'Home' ? "Dean's Honor (4.00)" : 'Good Standing'}
+            </div>
           </div>
 
           <div className="rounded-2xl bg-white p-5 shadow-xs border border-gray-200/80">
             <div className="flex items-center space-x-2 text-xs font-medium text-gray-500">
               <Clock className="h-3.5 w-3.5 text-emerald-600" />
-              <span>Status</span>
+              <span>Term Status</span>
             </div>
             <div className="mt-2 text-base sm:text-lg font-extrabold text-slate-900 truncate">
-              {selectedTerm === 'Home' || selectedTerm === 'Spring 2026' ? 'Active Term' : 'Locked Archive 🔒'}
+              {selectedTerm === 'Home' || selectedTerm === 'Spring 2026' ? 'Active Term' : 'Completed Term'}
             </div>
           </div>
         </div>
@@ -899,14 +915,22 @@ export default function StudentSkyDashboard() {
         </div>
 
         {/* ============================================================== */}
-        {/* 7. DYNAMIC TERM COURSEWORK GRID (CHANGES WITH SELECTED TERM!)   */}
+        {/* 7. DYNAMIC TERM COURSEWORK GRID                                */}
         {/* ============================================================== */}
         <div className="mt-6 rounded-2xl bg-white p-6 shadow-xs border border-gray-200/80">
           <div className="flex items-center justify-between border-b border-gray-100 pb-4">
             <div>
-              <h3 className="text-lg font-bold text-slate-900">
-                {selectedTerm === 'Home' ? 'All Transcript Courses (2019 Fall - 2026 Spring)' : `${selectedTerm} Courses & Grades`}
-              </h3>
+              <div className="flex items-center space-x-2">
+                <h3 className="text-lg font-bold text-slate-900">
+                  {selectedTerm === 'Home' ? 'All Transcript Courses (2019 Fall - 2026 Spring)' : `${selectedTerm} Courses & Grades`}
+                </h3>
+                {currentTab?.deansHonor && (
+                  <span className="inline-flex items-center space-x-1 text-xs font-bold text-amber-700 bg-amber-50 px-2 py-0.5 rounded border border-amber-200">
+                    <Award className="h-3.5 w-3.5 text-amber-500" />
+                    <span>The Dean&apos;s Honor List</span>
+                  </span>
+                )}
+              </div>
               <p className="text-xs text-gray-500 mt-0.5">
                 Official Glendale Community College Records · Associate of Science in Aviation and Transportation - Pilot Training
               </p>
@@ -948,6 +972,8 @@ export default function StudentSkyDashboard() {
                       className={`font-bold px-2 py-0.5 rounded text-[11px] ${
                         c.current_grade === 'AR'
                           ? 'bg-purple-50 text-purple-700 border border-purple-200'
+                          : c.current_grade === 'A'
+                          ? 'bg-amber-50 text-amber-700 border border-amber-200'
                           : 'bg-emerald-50 text-emerald-700'
                       }`}
                     >

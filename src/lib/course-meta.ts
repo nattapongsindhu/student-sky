@@ -97,10 +97,11 @@ export function courseGradeSummaryFor(course: Course) {
 
 export function compactCourseTitleFor(course: Course) {
   if (course.code === "AT 120") return "Private Pilot Ground";
-  if (course.code === "AT 121") return "Instrument Pilot Ground";
-  if (course.code === "AT 122") return "Flight Meteorology";
-  if (course.code === "AT 123") return "Commercial Pilot Ground";
-  if (course.code === "AT 124") return "Aircraft Systems";
+  if (course.code === "AT 121") return "Navigation";
+  if (course.code === "AT 122") return "Meteorology";
+  if (course.code === "AT 123") return "Aerodynamics";
+  if (course.code === "AT 124") return "Radio/Flight Regs";
+  if (course.code === "ESL 126") return "Reading & Vocab II";
   if (course.code === "ST DV 103") return "College Orientation";
   if (course.code === "MUSIC 121") return "Rock Music";
   if (course.code === "MATH 90+") return "Inter Alg BSTEM";
@@ -116,7 +117,10 @@ export function displayCourseTitleFor(course: Course) {
 }
 
 export function classTypeLinesFor(course: Course) {
-  if (course.code === "AT 122") return ["Aviation Arts", "Mon 18:40-21:50"];
+  if (course.code === "AT 122") {
+    if (course.term_label === "Spring 2026") return ["Aviation Arts", "Wed 18:40-21:50"];
+    return ["Aviation Arts", "18:40-21:50"];
+  }
   if (course.code === "AT 120") return ["Aviation Arts 103", "Sat 08:00-13:20"];
   if (course.code === "AT 121") return ["Aviation Arts", "Tue 18:40-21:50"];
   if (course.code === "AT 123") return ["Aviation Arts", "Mon 18:40-21:50"];
@@ -160,22 +164,22 @@ export function campusDisplayFor(course: Course) {
 
 export function instructorFor(course: Course) {
   if (course.code === "AT 120") return "Anthony Byrnes";
-  if (course.code === "AT 121") return "Anthony Byrnes";
-  if (course.code === "AT 122") return "Anthony Byrnes";
-  if (course.code === "AT 123") return "GCC Aviation Faculty";
+  if (course.code === "AT 121") return "Robert Newman";
+  if (course.code === "AT 122") return "Bruce Allport";
+  if (course.code === "AT 123") return "Robert Newman";
   if (course.code === "AT 124") return "Mel Futrell";
   if (course.code === "MATH 90+") return "Hai T. Ong";
   if (course.code === "CHEM 110") return "Thi Huyh Giang Nguyen";
   if (course.code === "ENGL 101") return "Kenneth Cran";
-  if (course.code === "ENGL 102") return "GCC English Faculty";
+  if (course.code === "ENGL 102") return "Dr. Jessica Groper";
   if (course.code === "ESL 123") return "Nancy Gimbrone";
   if (course.code === "ESL 125") return "Patricia Hironymous";
   if (course.code === "ESL 126") return "Dante Camargo";
   if (course.code === "ESL 133") return "Nancy Gimbrone";
   if (course.code === "ESL 136") return "Dante Camargo";
-  if (course.code === "ESL 141") return "Ashley Gipp";
-  if (course.code === "MUSIC 121") return "GCC Music Faculty";
-  if (course.code === "SPCH 101") return "GCC Speech Faculty";
+  if (course.code === "ESL 141") return course.term_label === "Fall 2021" ? "Brian J. McDonald" : "Ashley Gipp";
+  if (course.code === "MUSIC 121") return "Michael Wachs";
+  if (course.code === "SPCH 101") return "Dr. Jeffrey Smith";
   if (course.code === "ST DV 103") return "GCC Student Development";
   return "GCC Faculty";
 }

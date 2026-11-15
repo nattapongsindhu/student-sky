@@ -27,7 +27,7 @@ const fixedBlocks: ScheduleBlock[] = [
   // AT 122 (Spring 2026 / Spring 2021)
   {
     courseCode: "AT 122",
-    day: "mon",
+    day: "wed",
     location: "Aviation Arts",
     meetingLabel: "18:40-21:50",
     time: "18:40-21:50",

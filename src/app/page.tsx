@@ -32,7 +32,7 @@ import {
 } from "@/lib/semester";
 import type { Assignment, Course, TermConfig } from "@/lib/semester";
 import { isCanvasComplete, statusLabels } from "@/lib/status";
-import { SourceKind, TaskStatus } from "@/types/academic";
+import type { SourceKind, TaskStatus } from "@/types/academic";
 import type { CanvasAnnouncement } from "@/lib/canvas-announcements";
 
 type HomeProps = {

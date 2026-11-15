@@ -422,7 +422,9 @@ function mainWorkTypeLabel(assignments: Assignment[]) {
     counts.set(assignment.task_type, (counts.get(assignment.task_type) ?? 0) + 1);
   });
 
-  const [taskType, count] = Array.from(counts.entries()).sort((a, b) => b[1] - a[1])[0];
+  const sorted = Array.from(counts.entries()).sort((a, b) => b[1] - a[1]);
+  if (!sorted.length || !sorted[0]) return "N/A";
+  const [taskType, count] = sorted[0];
   return `${taskTypeLabels[taskType] || taskType} (${count})`;
 }
 

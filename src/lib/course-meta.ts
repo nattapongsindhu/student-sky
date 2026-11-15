@@ -79,6 +79,7 @@ export function totalPoints(assignments: Assignment[]) {
 }
 
 export function courseOutcome(course: Course) {
+  if (course.course_status === "active") return "In progress";
   if (course.official_grade) return course.official_grade;
   if (course.final_grade && !course.final_grade.startsWith("Expected ")) return course.final_grade;
   if (course.course_status === "completed") return "Completed";

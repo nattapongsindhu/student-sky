@@ -45,16 +45,16 @@ export function CourseDetailCard({ assignments, course }: CourseDetailCardProps)
       </div>
       <p className="mt-2 text-sm text-slate-600">{instructorFor(course)}</p>
       <p className="mt-1 text-xs font-medium text-slate-500">
-        {course.units} units · {course.modality} ·
+        {completedAssignments.length}/{activeAssignments.length} assignments ·
         <span
           className={`ml-1 inline-flex rounded px-1.5 py-0.5 align-middle text-xs font-semibold ${
             isRenewal
               ? "bg-amber-100 text-amber-900 font-bold"
+              : outcome === "In progress"
+              ? "bg-slate-100 text-slate-700"
               : outcome === "A"
               ? "bg-emerald-100 text-emerald-800 font-bold"
-              : outcome !== "In progress"
-              ? "bg-slate-200 text-slate-800 font-semibold"
-              : "bg-slate-100 text-slate-700"
+              : "bg-slate-200 text-slate-800 font-semibold"
           }`}
         >
           {isRenewal ? "AR" : outcome}

@@ -1,4 +1,5 @@
 ﻿import { realCanvasAssignments } from "./real-assignments";
+import { gccCourseworkAssignments } from "./gcc-coursework";
 import { AssignmentDifficulty, SourceKind, TaskStatus, TaskType } from "@/types/academic";
 
 export type Course = {
@@ -499,7 +500,7 @@ export const seedCourses: Course[] = [
   },
 ];
 
-export const seedAssignments: Assignment[] = realCanvasAssignments;
+export const seedAssignments: Assignment[] = [...realCanvasAssignments, ...gccCourseworkAssignments];
 
 export function daysUntil(dateString: string | null) {
   if (!dateString) return null;

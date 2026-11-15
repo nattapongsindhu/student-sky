@@ -180,7 +180,7 @@ export function instructorFor(course: Course) {
   if (course.code === "ESL 141") return course.term_label === "Fall 2021" ? "Brian J. McDonald" : "Ashley Gipp";
   if (course.code === "MUSIC 121") return "Michael Wachs";
   if (course.code === "SPCH 101") return "Dr. Jeffrey Smith";
-  if (course.code === "ST DV 103") return "GCC Student Development";
+  if (course.code === "ST DV 103") return "Intl. Councelor";
   return "GCC Faculty";
 }
 

@@ -129,22 +129,6 @@ const fixedBlocks: ScheduleBlock[] = [
     meetingLabel: "08:00-13:20",
     time: "08:00-13:20",
   },
-  // AT 121 (Fall 2020)
-  {
-    courseCode: "AT 121",
-    day: "tue",
-    location: "Online",
-    meetingLabel: "18:40-21:50",
-    time: "18:40-21:50",
-  },
-  // AT 123 (Fall 2020)
-  {
-    courseCode: "AT 123",
-    day: "mon",
-    location: "Online",
-    meetingLabel: "18:40-21:50",
-    time: "18:40-21:50",
-  },
   // ENGL 101 (Fall 2020)
   {
     courseCode: "ENGL 101",
@@ -181,6 +165,22 @@ const fixedBlocks: ScheduleBlock[] = [
     location: "Online",
     meetingLabel: "12:20-13:45",
     time: "12:20-13:45",
+  },
+  // AT 123 (Fall 2020)
+  {
+    courseCode: "AT 123",
+    day: "mon",
+    location: "Online",
+    meetingLabel: "18:40-21:50",
+    time: "18:40-21:50",
+  },
+  // AT 121 (Fall 2020)
+  {
+    courseCode: "AT 121",
+    day: "tue",
+    location: "Online",
+    meetingLabel: "18:40-21:50",
+    time: "18:40-21:50",
   },
   // SPCH 101 (Winter 2021)
   {

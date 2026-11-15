@@ -19,7 +19,7 @@ export const gccCourseworkAssignments: Assignment[] = [
     canvas_submission_confirmed: true,
     notes: "Completed for transcript credit (P).",
     url: null,
-    source: "seed" as const,
+    source: "syllabus" as const,
   })),
 
   // --- Fall 2019: ESL 123 (24 assignments) ---
@@ -40,7 +40,7 @@ export const gccCourseworkAssignments: Assignment[] = [
     canvas_submission_confirmed: true,
     notes: "Official GCC Coursework Grade D.",
     url: null,
-    source: "seed" as const,
+    source: "syllabus" as const,
   })),
 
   // --- Fall 2019: ESL 126 (16 assignments) ---
@@ -61,7 +61,7 @@ export const gccCourseworkAssignments: Assignment[] = [
     canvas_submission_confirmed: true,
     notes: "Official GCC Coursework Grade C.",
     url: null,
-    source: "seed" as const,
+    source: "syllabus" as const,
   })),
 
   // --- Winter 2020: ESL 133 (20 assignments) ---
@@ -82,7 +82,7 @@ export const gccCourseworkAssignments: Assignment[] = [
     canvas_submission_confirmed: true,
     notes: "Official GCC Coursework Grade C.",
     url: null,
-    source: "seed" as const,
+    source: "syllabus" as const,
   })),
 
   // --- Winter 2020: ESL 136 (14 assignments) ---
@@ -103,7 +103,7 @@ export const gccCourseworkAssignments: Assignment[] = [
     canvas_submission_confirmed: true,
     notes: "Official GCC Coursework Grade A.",
     url: null,
-    source: "seed" as const,
+    source: "syllabus" as const,
   })),
 
   // --- Spring 2020: AT 120 (24 assignments) ---
@@ -124,7 +124,7 @@ export const gccCourseworkAssignments: Assignment[] = [
     canvas_submission_confirmed: true,
     notes: "Official GCC Coursework Grade A (5.0 units).",
     url: null,
-    source: "seed" as const,
+    source: "syllabus" as const,
   })),
 
   // --- Spring 2020: ESL 141 (25 assignments) ---
@@ -145,7 +145,7 @@ export const gccCourseworkAssignments: Assignment[] = [
     canvas_submission_confirmed: true,
     notes: "Official GCC Coursework Grade D.",
     url: null,
-    source: "seed" as const,
+    source: "syllabus" as const,
   })),
 
   // --- Spring 2020: MATH 90+ (28 assignments) ---
@@ -166,7 +166,7 @@ export const gccCourseworkAssignments: Assignment[] = [
     canvas_submission_confirmed: true,
     notes: "Official GCC Coursework Grade F.",
     url: null,
-    source: "seed" as const,
+    source: "syllabus" as const,
   })),
 
   // --- Fall 2020: MUSIC 121 (16 assignments) ---
@@ -187,7 +187,7 @@ export const gccCourseworkAssignments: Assignment[] = [
     canvas_submission_confirmed: true,
     notes: "Official GCC Coursework Grade A.",
     url: null,
-    source: "seed" as const,
+    source: "syllabus" as const,
   })),
 
   // --- Winter 2021: SPCH 101 (12 assignments) ---
@@ -208,7 +208,7 @@ export const gccCourseworkAssignments: Assignment[] = [
     canvas_submission_confirmed: true,
     notes: "Official GCC Coursework Grade C.",
     url: null,
-    source: "seed" as const,
+    source: "syllabus" as const,
   })),
 
   // --- Spring 2021: MATH 90+ (28 assignments) ---
@@ -229,7 +229,7 @@ export const gccCourseworkAssignments: Assignment[] = [
     canvas_submission_confirmed: true,
     notes: "Official GCC Coursework Grade F.",
     url: null,
-    source: "seed" as const,
+    source: "syllabus" as const,
   })),
 
   // --- Fall 2021: AT 124 (14 assignments) ---
@@ -250,7 +250,7 @@ export const gccCourseworkAssignments: Assignment[] = [
     canvas_submission_confirmed: true,
     notes: "Official GCC Coursework Grade C.",
     url: null,
-    source: "seed" as const,
+    source: "syllabus" as const,
   })),
 
   // --- Fall 2021: MATH 90+ (28 assignments) ---
@@ -271,6 +271,6 @@ export const gccCourseworkAssignments: Assignment[] = [
     canvas_submission_confirmed: true,
     notes: "Official GCC Coursework Grade D.",
     url: null,
-    source: "seed" as const,
+    source: "syllabus" as const,
   })),
 ];

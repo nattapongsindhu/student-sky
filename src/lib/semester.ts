@@ -56,17 +56,18 @@ export interface TermConfig {
   year: number;
   season: TermSeason;
   status: TermStatus;
+  deansHonor?: boolean;
 }
 
 export const termConfigs: TermConfig[] = [
   { id: "2019-fall", label: "Fall 2019", year: 2019, season: "fall", status: "archived" },
-  { id: "2020-winter", label: "Winter 2020", year: 2020, season: "winter", status: "archived" },
-  { id: "2020-spring", label: "Spring 2020", year: 2020, season: "spring", status: "archived" },
-  { id: "2020-fall", label: "Fall 2020", year: 2020, season: "fall", status: "archived" },
+  { id: "2020-winter", label: "Winter 2020", year: 2020, season: "winter", status: "archived", deansHonor: true },
+  { id: "2020-spring", label: "Spring 2020", year: 2020, season: "spring", status: "archived", deansHonor: true },
+  { id: "2020-fall", label: "Fall 2020", year: 2020, season: "fall", status: "archived", deansHonor: true },
   { id: "2021-winter", label: "Winter 2021", year: 2021, season: "winter", status: "archived" },
   { id: "2021-spring", label: "Spring 2021", year: 2021, season: "spring", status: "archived" },
   { id: "2021-fall", label: "Fall 2021", year: 2021, season: "fall", status: "archived" },
-  { id: "2026-spring", label: "Spring 2026", year: 2026, season: "spring", status: "active" },
+  { id: "2026-spring", label: "Spring 2026", year: 2026, season: "spring", status: "active", deansHonor: true },
 ];
 
 export const termDateRanges: Record<string, { startsOn: string; endsOn: string }> = {

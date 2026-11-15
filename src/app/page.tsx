@@ -63,7 +63,7 @@ function assignmentsForFocus(
   return assignments.priority;
 }
 
-function decisionCopyForFocus(focus: FocusFilter | null) {
+function decisionCopyForFocus(focus: FocusFilter | null, isAllCompleted = false) {
   if (focus === "due-soon") {
     return {
       title: "Due in 7 days",
@@ -80,6 +80,13 @@ function decisionCopyForFocus(focus: FocusFilter | null) {
     return {
       title: "Missing / mismatch",
       body: "Overdue coursework plus items you marked submitted that Canvas has not confirmed yet.",
+    };
+  }
+
+  if (isAllCompleted) {
+    return {
+      title: "Coursework Status",
+      body: "All assignments, flight ground exams, and Canvas submissions have concluded and are 100% graded.",
     };
   }
 
@@ -124,7 +131,13 @@ export default async function Home({ searchParams }: HomeProps) {
   const liveAssignments = currentAssignments.filter((assignment) => assignment.source === "canvas" || assignment.source === "mock");
 
   const priorityAssignments = liveAssignments
-    .filter((assignment) => assignment.status !== "USER_MARKED_SUBMITTED" && assignment.status !== "CANCELLED")
+    .filter(
+      (assignment) =>
+        !isCanvasComplete(assignment.status) &&
+        assignment.status !== "USER_MARKED_SUBMITTED" &&
+        assignment.status !== "CANCELLED" &&
+        assignment.progress_percent < 100,
+    )
     .slice()
     .sort((a, b) => b.priority_score - a.priority_score)
     .slice(0, 6);
@@ -136,6 +149,7 @@ export default async function Home({ searchParams }: HomeProps) {
       days >= 0 &&
       days <= 7 &&
       !isCanvasComplete(assignment.status) &&
+      assignment.progress_percent < 100 &&
       assignment.status !== "USER_MARKED_SUBMITTED" &&
       assignment.status !== "CANCELLED"
     );
@@ -144,7 +158,10 @@ export default async function Home({ searchParams }: HomeProps) {
   const flightLabCount = liveAssignments.filter((assignment) => assignment.task_type === "flight_lab" || assignment.task_type === "lab").length;
 
   const mismatchAssignments = liveAssignments.filter(
-    (assignment) => assignment.status === "USER_MARKED_SUBMITTED" && !assignment.canvas_submission_confirmed,
+    (assignment) =>
+      assignment.status === "USER_MARKED_SUBMITTED" &&
+      !assignment.canvas_submission_confirmed &&
+      !isCanvasComplete(assignment.status),
   );
 
   const missingAssignments = liveAssignments.filter((assignment) => {
@@ -153,6 +170,8 @@ export default async function Home({ searchParams }: HomeProps) {
       days !== null &&
       days < 0 &&
       !assignment.canvas_submission_confirmed &&
+      !isCanvasComplete(assignment.status) &&
+      assignment.progress_percent < 100 &&
       assignment.status !== "USER_MARKED_SUBMITTED" &&
       assignment.status !== "CANCELLED"
     );
@@ -163,6 +182,8 @@ export default async function Home({ searchParams }: HomeProps) {
   const atRiskAssignments = liveAssignments.filter(
     (assignment) =>
       (assignment.risk_level === "HIGH" || assignment.risk_level === "CRITICAL") &&
+      !isCanvasComplete(assignment.status) &&
+      assignment.progress_percent < 100 &&
       assignment.status !== "USER_MARKED_SUBMITTED" &&
       assignment.status !== "CANCELLED",
   );
@@ -174,7 +195,9 @@ export default async function Home({ searchParams }: HomeProps) {
     priority: priorityAssignments,
   });
 
-  const decisionCopy = decisionCopyForFocus(requestedFocus);
+  const isAllCompleted = liveAssignments.length > 0 && liveAssignments.every((a) => isCanvasComplete(a.status) || a.progress_percent === 100);
+
+  const decisionCopy = decisionCopyForFocus(requestedFocus, isAllCompleted);
 
   const upcomingLiveAssignments = liveAssignments.filter((assignment) => {
     const days = daysUntil(assignment.due_at);
@@ -353,6 +376,16 @@ export default async function Home({ searchParams }: HomeProps) {
                       </article>
                     );
                   })
+                ) : isAllCompleted ? (
+                  <div className="rounded-lg border border-dashed border-emerald-300 bg-emerald-50/70 p-6 text-center">
+                    <CheckCircle2 className="mx-auto h-8 w-8 text-emerald-600" />
+                    <h3 className="mt-2 text-base font-semibold text-emerald-950">
+                      All Term Coursework Completed
+                    </h3>
+                    <p className="mt-1 text-sm text-emerald-700">
+                      All assignments, flight ground quizzes, and Canvas submissions are graded and verified (100% done). No pending deadlines.
+                    </p>
+                  </div>
                 ) : (
                   <EmptyState
                     action="Open Sync Console"
@@ -438,7 +471,7 @@ function TermSwitcher({ selectedTabId, selectedTerm }: { selectedTabId: string; 
           return (
             <Link
               aria-current={isSelected ? "page" : undefined}
-              className={`flex items-center gap-2 rounded-lg px-3 py-2 text-sm transition-colors ${
+              className={`flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm transition-colors ${
                 isSelected
                   ? "bg-slate-900 font-semibold text-white shadow-sm"
                   : "font-medium text-slate-600 hover:bg-white/60 hover:text-slate-900"
@@ -447,6 +480,20 @@ function TermSwitcher({ selectedTabId, selectedTerm }: { selectedTabId: string; 
               key={term.id}
             >
               <span>{term.label}</span>
+              {term.deansHonor ? (
+                <span
+                  title="The Dean's Honor List"
+                  className="inline-flex items-center"
+                >
+                  <Award
+                    className={`h-3.5 w-3.5 ${
+                      isSelected
+                        ? "text-amber-300 fill-amber-300/30"
+                        : "text-amber-500 fill-amber-500/20"
+                    }`}
+                  />
+                </span>
+              ) : null}
             </Link>
           );
         })}
@@ -463,9 +510,17 @@ function SemesterOverviewView({ assignments, courses, term }: { assignments: Ass
       <div className="rounded-lg border border-slate-200 bg-white p-5">
         <div className="flex flex-col justify-between gap-3 md:flex-row md:items-center">
           <div>
-            <h2 className="text-xl font-semibold">
-              {term.label} ({formatTermDate(termDates.startsOn)} to {formatTermDate(termDates.endsOn)})
-            </h2>
+            <div className="flex flex-wrap items-center gap-2">
+              <h2 className="text-xl font-semibold">
+                {term.label} ({formatTermDate(termDates.startsOn)} to {formatTermDate(termDates.endsOn)})
+              </h2>
+              {term.deansHonor ? (
+                <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-800">
+                  <Award className="h-3.5 w-3.5 fill-amber-400/30 text-amber-600" />
+                  The Dean&apos;s Honor List
+                </span>
+              ) : null}
+            </div>
             <p className="text-sm text-slate-600">Courses and schedule for this semester only.</p>
           </div>
           <span className="rounded bg-slate-100 px-3 py-2 text-sm font-semibold text-slate-700">
@@ -668,28 +723,28 @@ function CollegeNews() {
   ];
 
   return (
-    <div className="rounded-lg border border-sky-200 bg-sky-50 p-5">
+    <div className="rounded-lg border border-rose-200 bg-rose-50 p-5">
       <div className="flex items-start justify-between gap-3">
         <div>
-          <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-sky-800">
+          <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-rose-800">
             <GraduationCap className="h-4 w-4" />
             College News
           </div>
           <h2 className="mt-2 text-xl font-semibold text-slate-950">GCC announcements and student services</h2>
         </div>
-        <span className="rounded bg-sky-200 px-2 py-1 text-xs font-semibold text-sky-900">Week 10</span>
+        <span className="rounded bg-rose-200 px-2 py-1 text-xs font-semibold text-rose-900">Week 10</span>
       </div>
 
       <div className="mt-4 space-y-3">
         {newsItems.map((item) => (
-          <article className="rounded-lg border border-sky-200 bg-white p-3" key={item.id}>
+          <article className="rounded-lg border border-rose-200 bg-white p-3" key={item.id}>
             <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600">
-              <span className="rounded bg-sky-100 px-2 py-1 text-sky-900">{item.category}</span>
+              <span className="rounded bg-rose-100 px-2 py-1 text-rose-900">{item.category}</span>
               <span>{item.term}</span>
             </div>
             <h3 className="mt-2 text-sm font-semibold text-slate-950">{item.title}</h3>
             <p className="mt-1 line-clamp-2 text-sm text-slate-700">{item.summary}</p>
-            <Link className="mt-2 inline-flex text-sm font-semibold text-teal-800" href={item.link} target="_blank">
+            <Link className="mt-2 inline-flex text-sm font-semibold text-rose-800 hover:text-rose-900" href={item.link} target="_blank">
               {item.actionText}
             </Link>
           </article>

@@ -1,4 +1,4 @@
-import type { Assignment, Course } from "@/lib/semester";
+﻿import type { Assignment, Course } from "@/lib/semester";
 import type { SourceKind, TaskStatus, TaskType } from "@/types/academic";
 
 export const sourceLabels: Record<SourceKind, string> = {
@@ -97,15 +97,17 @@ export function courseGradeSummaryFor(course: Course) {
 
 export function compactCourseTitleFor(course: Course) {
   if (course.code === "AT 120") return "Private Pilot Ground";
-  if (course.code === "AT 121") return "Aircraft Powerplants";
-  if (course.code === "AT 121L") return "Flight Training Lab";
-  if (course.code === "AT 122") return "Instrument Rating";
-  if (course.code === "AT 123") return "Commercial Pilot";
-  if (course.code === "AT 124") return "Flight Instructor";
-  if (course.code === "IND T 100") return "Industrial Tech";
-  if (course.code === "STDV 101") return "Educational Planning";
-  if (course.code === "ST DV 103") return "Orientation";
-  if (course.code === "MUSIC 121") return "Music History";
+  if (course.code === "AT 121") return "Navigation";
+  if (course.code === "AT 122") return "Meteorology";
+  if (course.code === "AT 123") return "Aerodynamics";
+  if (course.code === "AT 124") return "Flight Regulations";
+  if (course.code === "ST DV 103") return "Intl Students";
+  if (course.code === "MUSIC 121") return "Rock Music";
+  if (course.code === "MATH 90+") return "Inter Alg BSTEM";
+  if (course.code === "CHEM 110") return "Gen Chemistry";
+  if (course.code === "ENGL 101") return "Freshman English";
+  if (course.code === "ENGL 102") return "Critical Thinking";
+  if (course.code === "SPCH 101") return "Public Speaking";
   return course.title;
 }
 
@@ -114,10 +116,24 @@ export function displayCourseTitleFor(course: Course) {
 }
 
 export function classTypeLinesFor(course: Course) {
-  if (course.code === "AT 121L") return ["Airport Lab", "Mon / Wed 08:00-11:00 (KPOC Whiteman)"];
-  if (course.code === "AT 122") return ["Online / Hybrid", "Tue / Thu 17:00-18:30"];
-  if (course.code === "IND T 100") return ["Online", "Thu 19:00-21:30"];
-  if (course.code === "STDV 101") return ["Online", "(Asynchronous)"];
+  if (course.code === "AT 122") return ["Aviation Arts", "Mon 18:40-21:50"];
+  if (course.code === "AT 120") return ["Aviation Arts 103", "Sat 08:00-13:20"];
+  if (course.code === "AT 121") return ["Aviation Arts", "Tue 18:40-21:50"];
+  if (course.code === "AT 123") return ["Aviation Arts", "Mon 18:40-21:50"];
+  if (course.code === "AT 124") return ["Aviation Arts", "Thu 18:40-21:50"];
+  if (course.code === "MATH 90+") return ["San Fernando 103 / Online", "MoTuWeTh 07:35-09:00"];
+  if (course.code === "CHEM 110") return ["Online", "MoTuWe 12:20-13:35 / 14:25"];
+  if (course.code === "ENGL 101") return ["Campus / Online", "TuThFr 07:35-08:50"];
+  if (course.code === "ENGL 102") return ["Campus / Online", "MoWe 10:45-12:10"];
+  if (course.code === "MUSIC 121") return ["Campus Lecture", "MoWe 12:20-13:45"];
+  if (course.code === "SPCH 101") return ["Campus Lecture", "MoTuWeTh 10:40-13:05"];
+  if (course.code === "ESL 125") return ["Camino Real 223", "TuTh 10:45-12:50"];
+  if (course.code === "ESL 126") return ["San Rafael 208", "TuTh 09:10-10:35"];
+  if (course.code === "ESL 123") return ["Camino Real 223", "TuTh 13:55-16:25"];
+  if (course.code === "ESL 133") return ["Camino Real 223", "MoTuWeTh 09:00-12:30"];
+  if (course.code === "ESL 136") return ["Auditorium 114", "MoTuWe 13:20-16:10"];
+  if (course.code === "ESL 141") return ["GCC Verdugo / Online", "TuTh 09:10-11:40"];
+  if (course.code === "ST DV 103") return ["GCC Verdugo", "Wed 12:20-13:30"];
 
   const modality = course.modality.toLowerCase();
   const isAsyncOnline =
@@ -138,21 +154,29 @@ export function classTypeSummaryFor(course: Course) {
 }
 
 export function campusDisplayFor(course: Course) {
-  if (course.code === "AT 121L") return "KPOC Whiteman Airport";
   if (course.code.startsWith("AT")) return "GCC Aviation Center";
   return course.campus;
 }
 
 export function instructorFor(course: Course) {
-  if (course.code === "AT 120") return "Capt. David Martinez (CFI/CFII)";
-  if (course.code === "AT 121") return "Prof. Robert Thorne";
-  if (course.code === "AT 121L") return "Chief Flight Instructor (Part 141)";
-  if (course.code === "AT 122") return "Capt. Sarah Jenkins (CFII)";
-  if (course.code === "AT 123") return "Capt. Michael Vance (ATP)";
-  if (course.code === "AT 124") return "Capt. Brian Walker (MEI)";
-  if (course.code === "IND T 100") return "Prof. Mark Johnson";
-  if (course.code === "STDV 101") return "Dr. Elena Rostova";
-  if (course.code === "MUSIC 121") return "Prof. Alan Smith";
+  if (course.code === "AT 120") return "Anthony Byrnes";
+  if (course.code === "AT 121") return "Anthony Byrnes";
+  if (course.code === "AT 122") return "Anthony Byrnes";
+  if (course.code === "AT 123") return "GCC Aviation Faculty";
+  if (course.code === "AT 124") return "Mel Futrell";
+  if (course.code === "MATH 90+") return "Hai T. Ong";
+  if (course.code === "CHEM 110") return "Thi Huyh Giang Nguyen";
+  if (course.code === "ENGL 101") return "Kenneth Cran";
+  if (course.code === "ENGL 102") return "GCC English Faculty";
+  if (course.code === "ESL 123") return "Nancy Gimbrone";
+  if (course.code === "ESL 125") return "Patricia Hironymous";
+  if (course.code === "ESL 126") return "Dante Camargo";
+  if (course.code === "ESL 133") return "Nancy Gimbrone";
+  if (course.code === "ESL 136") return "Dante Camargo";
+  if (course.code === "ESL 141") return "Ashley Gipp";
+  if (course.code === "MUSIC 121") return "GCC Music Faculty";
+  if (course.code === "SPCH 101") return "GCC Speech Faculty";
+  if (course.code === "ST DV 103") return "GCC Student Development";
   return "GCC Faculty";
 }
 

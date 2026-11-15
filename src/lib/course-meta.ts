@@ -97,11 +97,11 @@ export function courseGradeSummaryFor(course: Course) {
 
 export function compactCourseTitleFor(course: Course) {
   if (course.code === "AT 120") return "Private Pilot Ground";
-  if (course.code === "AT 121") return "Navigation";
-  if (course.code === "AT 122") return "Meteorology";
-  if (course.code === "AT 123") return "Aerodynamics";
-  if (course.code === "AT 124") return "Flight Regulations";
-  if (course.code === "ST DV 103") return "Intl Students";
+  if (course.code === "AT 121") return "Instrument Pilot Ground";
+  if (course.code === "AT 122") return "Flight Meteorology";
+  if (course.code === "AT 123") return "Commercial Pilot Ground";
+  if (course.code === "AT 124") return "Aircraft Systems";
+  if (course.code === "ST DV 103") return "College Orientation";
   if (course.code === "MUSIC 121") return "Rock Music";
   if (course.code === "MATH 90+") return "Inter Alg BSTEM";
   if (course.code === "CHEM 110") return "Gen Chemistry";

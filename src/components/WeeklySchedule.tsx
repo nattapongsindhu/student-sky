@@ -24,72 +24,32 @@ const weekdayColumns: { key: WeekdayKey; label: string }[] = [
 ];
 
 const fixedBlocks: ScheduleBlock[] = [
-  // AT 122 (Spring 2026 / Spring 2021)
-  {
-    courseCode: "AT 122",
-    day: "wed",
-    location: "Aviation Arts",
-    meetingLabel: "18:40-21:50",
-    time: "18:40-21:50",
-  },
-  // AT 120 (Spring 2020)
-  {
-    courseCode: "AT 120",
-    day: "sat",
-    location: "Aviation Arts 103",
-    meetingLabel: "08:00-13:20",
-    time: "08:00-13:20",
-  },
-  // AT 121 (Fall 2020)
-  {
-    courseCode: "AT 121",
-    day: "tue",
-    location: "Aviation Arts",
-    meetingLabel: "18:40-21:50",
-    time: "18:40-21:50",
-  },
-  // AT 123 (Fall 2020)
-  {
-    courseCode: "AT 123",
-    day: "mon",
-    location: "Aviation Arts",
-    meetingLabel: "18:40-21:50",
-    time: "18:40-21:50",
-  },
-  // AT 124 (Fall 2021)
-  {
-    courseCode: "AT 124",
-    day: "thu",
-    location: "Aviation Arts",
-    meetingLabel: "18:40-21:50",
-    time: "18:40-21:50",
-  },
   // MATH 90+ (Spring 2020, Spring 2021, Fall 2021)
   {
     courseCode: "MATH 90+",
     day: "mon",
-    location: "San Fernando 103 / Online",
+    location: "Online",
     meetingLabel: "07:35-09:00",
     time: "07:35-09:00",
   },
   {
     courseCode: "MATH 90+",
     day: "tue",
-    location: "San Fernando 103 / Online",
+    location: "Online",
     meetingLabel: "07:35-09:00",
     time: "07:35-09:00",
   },
   {
     courseCode: "MATH 90+",
     day: "wed",
-    location: "San Fernando 103 / Online",
+    location: "Online",
     meetingLabel: "07:35-09:00",
     time: "07:35-09:00",
   },
   {
     courseCode: "MATH 90+",
     day: "thu",
-    location: "San Fernando 103 / Online",
+    location: "Online",
     meetingLabel: "07:35-09:00",
     time: "07:35-09:00",
   },
@@ -115,55 +75,110 @@ const fixedBlocks: ScheduleBlock[] = [
     meetingLabel: "12:20-14:25",
     time: "12:20-14:25",
   },
+  // ENGL 102 (Spring 2021)
+  {
+    courseCode: "ENGL 102",
+    day: "mon",
+    location: "Online",
+    meetingLabel: "10:45-12:10",
+    time: "10:45-12:10",
+  },
+  {
+    courseCode: "ENGL 102",
+    day: "wed",
+    location: "Online",
+    meetingLabel: "10:45-12:10",
+    time: "10:45-12:10",
+  },
+  // AT 122 (Spring 2026 / Spring 2021)
+  {
+    courseCode: "AT 122",
+    day: "wed",
+    location: "Online",
+    meetingLabel: "18:40-21:50",
+    time: "18:40-21:50",
+  },
+  // ESL 141 (Spring 2020, Fall 2021)
+  {
+    courseCode: "ESL 141",
+    day: "tue",
+    location: "Online",
+    meetingLabel: "09:10-11:40",
+    time: "09:10-11:40",
+  },
+  {
+    courseCode: "ESL 141",
+    day: "thu",
+    location: "Online",
+    meetingLabel: "09:10-11:40",
+    time: "09:10-11:40",
+  },
+  // AT 124 (Fall 2021)
+  {
+    courseCode: "AT 124",
+    day: "thu",
+    location: "Online",
+    meetingLabel: "18:40-21:50",
+    time: "18:40-21:50",
+  },
+  // AT 120 (Spring 2020)
+  {
+    courseCode: "AT 120",
+    day: "sat",
+    location: "Online",
+    meetingLabel: "08:00-13:20",
+    time: "08:00-13:20",
+  },
+  // AT 121 (Fall 2020)
+  {
+    courseCode: "AT 121",
+    day: "tue",
+    location: "Online",
+    meetingLabel: "18:40-21:50",
+    time: "18:40-21:50",
+  },
+  // AT 123 (Fall 2020)
+  {
+    courseCode: "AT 123",
+    day: "mon",
+    location: "Online",
+    meetingLabel: "18:40-21:50",
+    time: "18:40-21:50",
+  },
   // ENGL 101 (Fall 2020)
   {
     courseCode: "ENGL 101",
     day: "tue",
-    location: "Campus Lecture",
+    location: "Online",
     meetingLabel: "07:35-08:50",
     time: "07:35-08:50",
   },
   {
     courseCode: "ENGL 101",
     day: "thu",
-    location: "Campus Lecture",
+    location: "Online",
     meetingLabel: "07:35-08:50",
     time: "07:35-08:50",
   },
   {
     courseCode: "ENGL 101",
     day: "fri",
-    location: "Campus Lecture",
+    location: "Online",
     meetingLabel: "07:35-08:50",
     time: "07:35-08:50",
-  },
-  // ENGL 102 (Spring 2021)
-  {
-    courseCode: "ENGL 102",
-    day: "mon",
-    location: "Campus Lecture",
-    meetingLabel: "10:45-12:10",
-    time: "10:45-12:10",
-  },
-  {
-    courseCode: "ENGL 102",
-    day: "wed",
-    location: "Campus Lecture",
-    meetingLabel: "10:45-12:10",
-    time: "10:45-12:10",
   },
   // MUSIC 121 (Fall 2020)
   {
     courseCode: "MUSIC 121",
     day: "mon",
-    location: "Campus Lecture",
+    location: "Online",
     meetingLabel: "12:20-13:45",
     time: "12:20-13:45",
   },
   {
     courseCode: "MUSIC 121",
     day: "wed",
-    location: "Campus Lecture",
+    location: "Online",
     meetingLabel: "12:20-13:45",
     time: "12:20-13:45",
   },
@@ -171,28 +186,28 @@ const fixedBlocks: ScheduleBlock[] = [
   {
     courseCode: "SPCH 101",
     day: "mon",
-    location: "Campus Lecture",
+    location: "Online",
     meetingLabel: "10:40-13:05",
     time: "10:40-13:05",
   },
   {
     courseCode: "SPCH 101",
     day: "tue",
-    location: "Campus Lecture",
+    location: "Online",
     meetingLabel: "10:40-13:05",
     time: "10:40-13:05",
   },
   {
     courseCode: "SPCH 101",
     day: "wed",
-    location: "Campus Lecture",
+    location: "Online",
     meetingLabel: "10:40-13:05",
     time: "10:40-13:05",
   },
   {
     courseCode: "SPCH 101",
     day: "thu",
-    location: "Campus Lecture",
+    location: "Online",
     meetingLabel: "10:40-13:05",
     time: "10:40-13:05",
   },
@@ -299,21 +314,6 @@ const fixedBlocks: ScheduleBlock[] = [
     location: "Auditorium 114",
     meetingLabel: "13:20-16:10",
     time: "13:20-16:10",
-  },
-  // ESL 141 (Spring 2020, Fall 2021)
-  {
-    courseCode: "ESL 141",
-    day: "tue",
-    location: "Online / Campus",
-    meetingLabel: "09:10-11:40",
-    time: "09:10-11:40",
-  },
-  {
-    courseCode: "ESL 141",
-    day: "thu",
-    location: "Online / Campus",
-    meetingLabel: "09:10-11:40",
-    time: "09:10-11:40",
   },
 ];
 

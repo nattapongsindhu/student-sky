@@ -482,7 +482,7 @@ function TermSwitcher({ selectedTabId, selectedTerm }: { selectedTabId: string; 
               <span>{term.label}</span>
               {term.deansHonor ? (
                 <span
-                  title="The Dean's Honor List"
+                  title="The Best Award"
                   className="inline-flex items-center"
                 >
                   <Award
@@ -517,7 +517,7 @@ function SemesterOverviewView({ assignments, courses, term }: { assignments: Ass
               {term.deansHonor ? (
                 <span className="inline-flex items-center gap-1 rounded-full border border-amber-200 bg-amber-50 px-2.5 py-0.5 text-xs font-semibold text-amber-800">
                   <Award className="h-3.5 w-3.5 fill-amber-400/30 text-amber-600" />
-                  The Dean&apos;s Honor List
+                  The Best Award
                 </span>
               ) : null}
             </div>

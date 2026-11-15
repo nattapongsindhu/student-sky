@@ -169,9 +169,9 @@ export function instructorFor(course: Course) {
   if (course.code === "AT 123") return "Robert Newman";
   if (course.code === "AT 124") return "Mel Futrell";
   if (course.code === "MATH 90+") return "Hai T. Ong";
-  if (course.code === "CHEM 110") return "Thi Huyh Giang Nguyen";
+  if (course.code === "CHEM 110") return "Thi Nguyen";
   if (course.code === "ENGL 101") return "Kenneth Cran";
-  if (course.code === "ENGL 102") return "Dr. Jessica Groper";
+  if (course.code === "ENGL 102") return "Jessica Groper";
   if (course.code === "ESL 123") return "Nancy Gimbrone";
   if (course.code === "ESL 125") return "Patricia Hironymous";
   if (course.code === "ESL 126") return "Dante Camargo";
@@ -179,7 +179,7 @@ export function instructorFor(course: Course) {
   if (course.code === "ESL 136") return "Dante Camargo";
   if (course.code === "ESL 141") return course.term_label === "Fall 2021" ? "Brian J. McDonald" : "Ashley Gipp";
   if (course.code === "MUSIC 121") return "Michael Wachs";
-  if (course.code === "SPCH 101") return "Dr. Jeffrey Smith";
+  if (course.code === "SPCH 101") return "Jeffrey Smith";
   if (course.code === "ST DV 103") return "Intl. Councelor";
   return "GCC Faculty";
 }

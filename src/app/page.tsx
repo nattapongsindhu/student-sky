@@ -579,9 +579,6 @@ function FocusGroup({
     </div>
   );
 }
-    </div>
-  );
-}
 
 function HomeOpsOverview({
   announcements,

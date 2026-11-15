@@ -170,7 +170,7 @@ export function instructorFor(course: Course) {
   if (course.code === "AT 124") return "Mel Futrell";
   if (course.code === "MATH 90+") return course.term_label === "Spring 2020" ? "John Fuhrmann" : "Hai T. Ong";
   if (course.code === "CHEM 110") return "Thi Nguyen";
-  if (course.code === "ENGL 101") return "Kenneth Cran";
+  if (course.code === "ENGL 101") return "Maggie Gover";
   if (course.code === "ENGL 102") return "Jessica Groper";
   if (course.code === "ESL 123") return "Daniel J. Tirman";
   if (course.code === "ESL 125") return "Patricia Hironymous";

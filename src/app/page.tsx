@@ -526,58 +526,59 @@ function TodayFocusPanel({
       </div>
       <h2 className="mt-2 text-xl font-semibold">Short-range focus</h2>
       <div className="mt-4 space-y-4">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Today</p>
-          {todayAssignments.length ? (
-            <div className="mt-2 space-y-2">
-              {todayAssignments.map((assignment) => {
-                const course = courses.find((item) => item.id === assignment.course_id);
-                return (
-                  <div className="flex items-center justify-between rounded-lg bg-slate-50 p-3" key={assignment.id}>
-                    <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: course?.color ?? "#0284c7" }} />
-                      <p className="text-sm font-semibold text-slate-900">{course?.code}</p>
-                      <p className="text-xs text-slate-500">
-                        {assignment.points_possible !== null ? `${assignment.points_possible} pts · ` : ""}
-                        {formatShortDate(assignment.due_at)}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <p className="mt-2 text-sm text-slate-600">No coursework due today.</p>
-          )}
-        </div>
-
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Next 72 hours</p>
-          {next72HourAssignments.length ? (
-            <div className="mt-2 space-y-2">
-              {next72HourAssignments.map((assignment) => {
-                const course = courses.find((item) => item.id === assignment.course_id);
-                return (
-                  <div className="flex items-center justify-between rounded-lg bg-slate-50 p-3" key={assignment.id}>
-                    <div className="flex items-center gap-2">
-                      <span className="h-2 w-2 rounded-full" style={{ backgroundColor: course?.color ?? "#0284c7" }} />
-                      <p className="text-sm font-semibold text-slate-900">{course?.code}</p>
-                      <p className="text-xs text-slate-500">
-                        {assignment.points_possible !== null ? `${assignment.points_possible} pts · ` : ""}
-                        {formatShortDate(assignment.due_at)}
-                      </p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          ) : (
-            <p className="mt-2 text-sm text-slate-600">
-              Nothing due in the next 72 hours. Next live due date: {nextDueAssignment?.due_at ? formatShortDate(nextDueAssignment.due_at) : "None scheduled."}
-            </p>
-          )}
-        </div>
+        <FocusGroup assignments={todayAssignments} courses={courses} emptyLabel="No live Canvas work due today." title="Today" />
+        <FocusGroup
+          assignments={next72HourAssignments}
+          courses={courses}
+          emptyLabel={
+            nextDueAssignment?.due_at
+              ? `Nothing due in the next 72 hours. Next live due date: ${formatShortDate(nextDueAssignment.due_at)}.`
+              : "Nothing due in the next 72 hours."
+          }
+          title="Next 72 hours"
+        />
       </div>
+    </div>
+  );
+}
+
+function FocusGroup({
+  assignments,
+  courses,
+  emptyLabel,
+  title,
+}: {
+  assignments: Assignment[];
+  courses: CourseLookup;
+  emptyLabel: string;
+  title: string;
+}) {
+  return (
+    <div>
+      <p className="text-sm font-semibold text-slate-700">{title}</p>
+      {assignments.length ? (
+        <div className="mt-2 space-y-2">
+          {assignments.map((assignment) => {
+            const course = courses.find((item) => item.id === assignment.course_id);
+            return (
+              <div className="rounded-lg bg-slate-50 p-3" key={assignment.id}>
+                <div className="flex flex-wrap items-center gap-2 text-xs font-semibold text-slate-600">
+                  <span className="h-2 w-2 rounded-full" style={{ backgroundColor: course?.color ?? "#334155" }} />
+                  <span>{course?.code ?? "Course"}</span>
+                  <span>{assignment.points_possible ?? 0} pts</span>
+                  <span>{assignment.due_at ? formatShortDate(assignment.due_at) : "No due date"}</span>
+                </div>
+                <p className="mt-1 text-sm font-semibold text-slate-950">{assignment.title}</p>
+              </div>
+            );
+          })}
+        </div>
+      ) : (
+        <p className="mt-2 rounded-lg bg-slate-50 p-3 text-sm text-slate-600">{emptyLabel}</p>
+      )}
+    </div>
+  );
+}
     </div>
   );
 }
@@ -679,7 +680,7 @@ function CollegeNews() {
           </div>
           <h2 className="mt-2 text-xl font-semibold text-slate-950">GCC announcements and student services</h2>
         </div>
-        <span className="rounded bg-sky-100 px-2 py-1 text-xs font-semibold text-sky-900">Week 10</span>
+        <span className="rounded bg-sky-200 px-2 py-1 text-xs font-semibold text-sky-900">Week 10</span>
       </div>
 
       <div className="mt-4 space-y-3">
@@ -691,11 +692,7 @@ function CollegeNews() {
             </div>
             <h3 className="mt-2 text-sm font-semibold text-slate-950">{item.title}</h3>
             <p className="mt-1 line-clamp-2 text-sm text-slate-700">{item.summary}</p>
-            <Link
-              className="mt-2 inline-flex text-sm font-semibold text-sky-800 hover:text-sky-950"
-              href={item.link}
-              target="_blank"
-            >
+            <Link className="mt-2 inline-flex text-sm font-semibold text-teal-800" href={item.link} target="_blank">
               {item.actionText}
             </Link>
           </article>
@@ -742,29 +739,25 @@ function ScholarshipCard() {
         <div>
           <div className="flex items-center gap-2 text-sm font-semibold uppercase tracking-[0.14em] text-emerald-800">
             <Award className="h-4 w-4" />
-            Scholarship &amp; Flight Benefits
+            Scholarship
           </div>
           <h2 className="mt-2 text-xl font-semibold text-slate-950">Active awards and student benefits</h2>
         </div>
-        <span className="rounded bg-emerald-100 px-2.5 py-1 text-xs font-semibold text-emerald-900">
+        <span className="rounded bg-emerald-200 px-2 py-1 text-xs font-semibold text-emerald-900">
           Best Choice
         </span>
       </div>
 
       <div className="mt-4 space-y-3">
         {items.map((item) => (
-          <article className="rounded-lg border border-emerald-200 bg-white p-3.5" key={item.id}>
+          <article className="rounded-lg border border-emerald-200 bg-white p-3" key={item.id}>
             <div className="flex flex-wrap items-center justify-between gap-2 text-xs font-semibold">
-              <span className="rounded bg-emerald-100 px-2 py-0.5 text-emerald-900">{item.provider}</span>
-              <span className="font-bold text-emerald-800">{item.value}</span>
+              <span className="rounded bg-emerald-100 px-2 py-1 text-emerald-900">{item.provider}</span>
+              <span className="text-xs font-semibold text-emerald-900">{item.value}</span>
             </div>
             <h3 className="mt-2 text-sm font-semibold text-slate-950">{item.title}</h3>
             <p className="mt-1 line-clamp-2 text-sm text-slate-700">{item.summary}</p>
-            <Link
-              className="mt-2.5 inline-flex text-sm font-semibold text-emerald-800 hover:text-emerald-950"
-              href={item.link}
-              target="_blank"
-            >
+            <Link className="mt-2 inline-flex text-sm font-semibold text-emerald-800" href={item.link} target="_blank">
               {item.actionText}
             </Link>
           </article>

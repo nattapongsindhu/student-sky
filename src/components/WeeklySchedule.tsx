@@ -245,7 +245,7 @@ const fixedBlocks: ScheduleBlock[] = [
   {
     courseCode: "ST DV 103",
     day: "wed",
-    location: "GCC Verdugo",
+    location: "Sierra Vista",
     meetingLabel: "12:20-13:30",
     time: "12:20-13:30",
   },

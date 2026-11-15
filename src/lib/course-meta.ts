@@ -137,7 +137,7 @@ export function classTypeLinesFor(course: Course) {
   if (course.code === "ESL 133") return ["Camino Real 223", "MoTuWeTh 09:00-12:30"];
   if (course.code === "ESL 136") return ["Auditorium 114", "MoTuWe 13:20-16:10"];
   if (course.code === "ESL 141") return ["GCC Verdugo / Online", "TuTh 09:10-11:40"];
-  if (course.code === "ST DV 103") return ["GCC Verdugo", "Wed 12:20-13:30"];
+  if (course.code === "ST DV 103") return ["Sierra Vista", "Wed 12:20-13:30"];
 
   const modality = course.modality.toLowerCase();
   const isAsyncOnline =

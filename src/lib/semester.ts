@@ -94,7 +94,7 @@ export const seedCourses: Course[] = [
     title: "International Students",
     term_label: "Fall 2019",
     course_status: "completed",
-    campus: "GCC Verdugo",
+    campus: "Sierra Vista",
     modality: "Campus Lecture",
     units: 1.0,
     final_grade: "P",

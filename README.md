@@ -14,7 +14,7 @@
 ---
 
 ## 🛠️ Tech Stack & Architecture
-* **Frontend:** Next.js 14 (App Router), React 18, Tailwind CSS, Lucide Icons
+* **Frontend:** Next.js 16 (App Router), React 19, Tailwind CSS, Lucide Icons
 * **Backend & API:** Next.js Route Handlers (`/api/sync/canvas`, `/api/cron`)
 * **Database & Auth:** Supabase PostgreSQL with Row Level Security (RLS)
 * **LMS Integration:** GCC Canvas LMS REST API (`/api/v1/courses`, `/api/v1/assignments`, `/api/v1/announcements`)
@@ -25,30 +25,30 @@
 
 ## 📋 Quick Setup & Deployment Guide
 
-### 1. Supabase Setup (สร้างโปรเจกต์ใหม่)
-1. เข้าไปที่ [Supabase Dashboard](https://supabase.com/dashboard)
-2. กด **New Project** ตั้งชื่อว่า `student-sky`
-3. ไปที่เมนู **SQL Editor** แล้วรันสคริปต์ตามลำดับ:
-   * รัน [`supabase/schema.sql`](file:///c:/Users/0xR00t/Documents/Antigravity/Web%20Apps/student-sky/supabase/schema.sql) เพื่อสร้างตาราง `courses`, `assignments`, `announcements`, `flight_lab_logs`, และ `sync_logs`
-   * รัน [`supabase/seed.sql`](file:///c:/Users/0xR00t/Documents/Antigravity/Web%20Apps/student-sky/supabase/seed.sql) เพื่อนำเข้าข้อมูลหลักสูตร GCC Aviation Pilot Training ทั้ง 7 เทอม
-4. ไปที่ **Project Settings > API** เพื่อคัดลอก:
+### 1. Supabase Setup (Create New Project)
+1. Navigate to the [Supabase Dashboard](https://supabase.com/dashboard).
+2. Click **New Project** and name it `student-sky`.
+3. Go to the **SQL Editor** menu and run scripts in order:
+   * Run [`supabase/schema.sql`](supabase/schema.sql) to create `courses`, `assignments`, `announcements`, `flight_lab_logs`, and `sync_logs` tables.
+   * Run [`supabase/seed.sql`](supabase/seed.sql) to seed the 7-term GCC Aviation Pilot Training curriculum records.
+4. Go to **Project Settings > API** to copy:
    * `Project URL`
    * `anon public key`
-   * `service_role key` (กด Reveal)
+   * `service_role key` (click Reveal)
 
 ---
 
 ### 2. GCC Canvas LMS API Token
-1. ล็อกอินเข้าสู่ **GCC Canvas** (`https://glendale.instructure.com`)
-2. คลิกที่รูปโปรไฟล์ **Account > Settings**
-3. เลื่อนลงมาที่หัวข้อ **Approved Integrations** แล้วคลิกปุ่ม **+ New Access Token**
-4. ตั้งชื่อ Purpose เช่น `student-sky-sync` แล้วคลิก **Generate Token**
-5. คัดลอก Token ที่ได้มาเก็บไว้เพื่อนำไปใส่ใน Environment Variables
+1. Log in to **GCC Canvas** (`https://glendale.instructure.com`).
+2. Click your profile avatar **Account > Settings**.
+3. Scroll down to **Approved Integrations** and click **+ New Access Token**.
+4. Set Purpose (e.g., `student-sky-sync`) and click **Generate Token**.
+5. Copy and securely store the generated token for environment configuration.
 
 ---
 
 ### 3. Environment Variables
-สร้างไฟล์ `.env.local` ในโฟลเดอร์นี้ โดยอิงจาก [`.env.example`](file:///c:/Users/0xR00t/Documents/Antigravity/Web%20Apps/student-sky/.env.example):
+Create a `.env.local` file in the project root based on [`.env.example`](.env.example):
 
 ```env
 NEXT_PUBLIC_APP_URL=http://localhost:3000
@@ -67,7 +67,7 @@ CRON_SECRET=your_secure_cron_secret_random_string
 ---
 
 ### 4. Git & GitHub Repository Setup
-สร้าง Repository ใหม่บน GitHub ชื่อ `student-sky`:
+Initialize and push to GitHub repository `student-sky`:
 
 ```bash
 cd "c:\Users\0xR00t\Documents\Antigravity\Web Apps\student-sky"
@@ -82,9 +82,9 @@ git push -u origin main
 ---
 
 ### 5. Vercel Deployment
-1. ไปที่ [Vercel Dashboard](https://vercel.com/dashboard)
-2. คลิก **Add New... > Project**
-3. เลือก Import จาก GitHub Repo `student-sky`
-4. ใส่ Environment Variables ทั้งหมดจากขั้นตอนที่ 3 ในหัวข้อ **Environment Variables**
-5. คลิก **Deploy**
-6. เมื่อ Deploy เสร็จ ระบบจะรัน Cron Job ทุก 06:00 AM PST อัตโนมัติ และคุณสามารถกด **Open Sync Console** บน Dashboard เพื่อสั่ง Manual Sync ได้ตลอดเวลา!
+1. Go to the [Vercel Dashboard](https://vercel.com/dashboard).
+2. Click **Add New... > Project**.
+3. Select and import the GitHub repository `student-sky`.
+4. Add all environment variables from Step 3 under **Environment Variables**.
+5. Click **Deploy**.
+6. Once deployed, the system will run daily Cron synchronization at 06:00 AM PST automatically, and you can click **Open Sync Console** on the dashboard anytime for manual sync!

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import {
   AlertTriangle,
@@ -307,6 +308,53 @@ export default async function Home({ searchParams }: HomeProps) {
 
           <div className="lg:col-span-2">
             <WeeklySchedule courses={activeTermCourses} />
+          </div>
+
+          <div className="lg:col-span-2">
+            <div className="rounded-lg border border-slate-200 bg-white p-6">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-xl font-bold tracking-tight text-slate-900">
+                    GCC GE Advisement Sheet
+                  </h2>
+                  <p className="mt-1 text-sm text-slate-500">2026-2027</p>
+                </div>
+                <span className="text-sm text-slate-500">2 pages</span>
+              </div>
+              <div className="mt-6 grid grid-cols-1 gap-6 md:grid-cols-2">
+                <a
+                  className="group block overflow-hidden rounded-lg border border-slate-200 bg-slate-50 transition hover:border-slate-300 hover:shadow-md"
+                  href="/gcc-ge-2026-2027-page-1.jpg"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  title="Click to view full size"
+                >
+                  <Image
+                    alt="GCC GE Advisement Sheet 2026-2027 - Page 1"
+                    className="h-auto w-full object-contain transition group-hover:opacity-95"
+                    height={2136}
+                    priority
+                    src="/gcc-ge-2026-2027-page-1.jpg"
+                    width={1650}
+                  />
+                </a>
+                <a
+                  className="group block overflow-hidden rounded-lg border border-slate-200 bg-slate-50 transition hover:border-slate-300 hover:shadow-md"
+                  href="/gcc-ge-2026-2027-page-2.jpg"
+                  rel="noopener noreferrer"
+                  target="_blank"
+                  title="Click to view full size"
+                >
+                  <Image
+                    alt="GCC GE Advisement Sheet 2026-2027 - Page 2"
+                    className="h-auto w-full object-contain transition group-hover:opacity-95"
+                    height={2136}
+                    src="/gcc-ge-2026-2027-page-2.jpg"
+                    width={1650}
+                  />
+                </a>
+              </div>
+            </div>
           </div>
 
           <div className="space-y-6">
